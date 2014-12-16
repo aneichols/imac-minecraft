@@ -1,1 +1,0 @@
-/usr/bin/c++       CMakeFiles/pokecraft_mainCraft.dir/mainCraft.cpp.o  -o pokecraft_mainCraft -rdynamic ../glimac/libglimac.a -Wl,-Bstatic -lSDLmain -Wl,-Bdynamic -lSDL -lpthread -lGLU -lGL -lSM -lICE -lX11 -lXext -lGLEW 
