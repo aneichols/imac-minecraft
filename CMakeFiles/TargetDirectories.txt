@@ -1,1 +1,0 @@
-/home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/CMakeFiles/mainCraft.dir

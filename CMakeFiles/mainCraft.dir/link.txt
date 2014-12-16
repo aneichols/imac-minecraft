@@ -1,1 +1,0 @@
-/usr/bin/c++       CMakeFiles/mainCraft.dir/src/mainCraft.cpp.o  -o mainCraft -rdynamic 
