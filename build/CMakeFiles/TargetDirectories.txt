@@ -1,0 +1,2 @@
+/home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/glimac/CMakeFiles/glimac.dir
+/home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/pokecraft/CMakeFiles/pokecraft_mainCraft.dir
