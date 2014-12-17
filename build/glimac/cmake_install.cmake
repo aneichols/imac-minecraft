@@ -1,4 +1,4 @@
-# Install script for directory: /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac
+# Install script for directory: /home/alice/Documents/Pokecraft/imac-minecraft/sources/glimac
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

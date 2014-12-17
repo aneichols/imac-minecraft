@@ -46,14 +46,11 @@ RM = /usr/bin/cmake -E remove -f
 # Escaping for special characters.
 EQUALS = =
 
-# The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/bin/ccmake
-
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources
+CMAKE_SOURCE_DIR = /home/alice/Documents/Pokecraft/imac-minecraft/sources
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build
+CMAKE_BINARY_DIR = /home/alice/Documents/Pokecraft/imac-minecraft/build
 
 #=============================================================================
 # Directory level rules for directory glimac
@@ -77,7 +74,7 @@ glimac/preinstall:
 glimac/CMakeFiles/glimac.dir/all:
 	$(MAKE) -f glimac/CMakeFiles/glimac.dir/build.make glimac/CMakeFiles/glimac.dir/depend
 	$(MAKE) -f glimac/CMakeFiles/glimac.dir/build.make glimac/CMakeFiles/glimac.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles  1 2 3 4 5 6 7 8 9 10 11
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles  1 2 3 4 5 6 7 8 9 10 11
 	@echo "Built target glimac"
 .PHONY : glimac/CMakeFiles/glimac.dir/all
 
@@ -87,9 +84,9 @@ all: glimac/CMakeFiles/glimac.dir/all
 
 # Build rule for subdir invocation for target.
 glimac/CMakeFiles/glimac.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 glimac/CMakeFiles/glimac.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles 0
 .PHONY : glimac/CMakeFiles/glimac.dir/rule
 
 # Convenience name for target.
@@ -127,7 +124,7 @@ pokecraft/preinstall:
 pokecraft/CMakeFiles/pokecraft_mainCraft.dir/all: glimac/CMakeFiles/glimac.dir/all
 	$(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/depend
 	$(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles  12
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles  12
 	@echo "Built target pokecraft_mainCraft"
 .PHONY : pokecraft/CMakeFiles/pokecraft_mainCraft.dir/all
 
@@ -137,9 +134,9 @@ all: pokecraft/CMakeFiles/pokecraft_mainCraft.dir/all
 
 # Build rule for subdir invocation for target.
 pokecraft/CMakeFiles/pokecraft_mainCraft.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles 12
 	$(MAKE) -f CMakeFiles/Makefile2 pokecraft/CMakeFiles/pokecraft_mainCraft.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles 0
 .PHONY : pokecraft/CMakeFiles/pokecraft_mainCraft.dir/rule
 
 # Convenience name for target.

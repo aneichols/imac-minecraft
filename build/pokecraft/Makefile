@@ -38,22 +38,19 @@ RM = /usr/bin/cmake -E remove -f
 # Escaping for special characters.
 EQUALS = =
 
-# The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/bin/ccmake
-
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources
+CMAKE_SOURCE_DIR = /home/alice/Documents/Pokecraft/imac-minecraft/sources
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build
+CMAKE_BINARY_DIR = /home/alice/Documents/Pokecraft/imac-minecraft/build
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running interactive CMake command-line interface..."
+	/usr/bin/cmake -i .
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -72,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/pokecraft/CMakeFiles/progress.marks
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build/CMakeFiles 0
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles /home/alice/Documents/Pokecraft/imac-minecraft/build/pokecraft/CMakeFiles/progress.marks
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alice/Documents/Pokecraft/imac-minecraft/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/clean
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/clean
 .PHONY : clean
 
 # The main clean target
@@ -88,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/preinstall
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/preinstall
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 pokecraft/CMakeFiles/pokecraft_mainCraft.dir/rule:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/CMakeFiles/pokecraft_mainCraft.dir/rule
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f CMakeFiles/Makefile2 pokecraft/CMakeFiles/pokecraft_mainCraft.dir/rule
 .PHONY : pokecraft/CMakeFiles/pokecraft_mainCraft.dir/rule
 
 # Convenience name for target.
@@ -112,7 +109,7 @@ pokecraft_mainCraft: pokecraft/CMakeFiles/pokecraft_mainCraft.dir/rule
 
 # fast build rule for target.
 pokecraft_mainCraft/fast:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build
 .PHONY : pokecraft_mainCraft/fast
 
 mainCraft.o: mainCraft.cpp.o
@@ -120,7 +117,7 @@ mainCraft.o: mainCraft.cpp.o
 
 # target to build an object file
 mainCraft.cpp.o:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/mainCraft.cpp.o
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/mainCraft.cpp.o
 .PHONY : mainCraft.cpp.o
 
 mainCraft.i: mainCraft.cpp.i
@@ -128,7 +125,7 @@ mainCraft.i: mainCraft.cpp.i
 
 # target to preprocess a source file
 mainCraft.cpp.i:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/mainCraft.cpp.i
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/mainCraft.cpp.i
 .PHONY : mainCraft.cpp.i
 
 mainCraft.s: mainCraft.cpp.s
@@ -136,7 +133,7 @@ mainCraft.s: mainCraft.cpp.s
 
 # target to generate assembly for a file
 mainCraft.cpp.s:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/mainCraft.cpp.s
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(MAKE) -f pokecraft/CMakeFiles/pokecraft_mainCraft.dir/build.make pokecraft/CMakeFiles/pokecraft_mainCraft.dir/mainCraft.cpp.s
 .PHONY : mainCraft.cpp.s
 
 # Help Target
@@ -162,6 +159,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/alice/Documents/Pokecraft/imac-minecraft/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
