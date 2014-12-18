@@ -9,6 +9,8 @@
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
 
+#include <pokecraft-lib/Physics.hpp>
+
 using namespace glimac;
 
 const GLuint VERTEX_ATTR_POSITION = 0;
@@ -84,6 +86,8 @@ void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::iv
  ****************************************************************************************/
 
 int main(int argc, char** argv) {
+    Pokecraft::Physics::test();
+
     // Initialize SDL and open a window
     SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "pokeCraft");
     SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2); // set users mouse positioin to the center  
