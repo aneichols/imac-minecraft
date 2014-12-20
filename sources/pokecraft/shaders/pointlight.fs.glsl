@@ -22,10 +22,11 @@ vec3 blinnPhong(){
 	float dist = distance(vPosition_view, uLightPos_vs);
 	vec3 lightIntensityAtten = uLightIntensity /( dist * dist);
 
-	vec3 color = vec3 (lightIntensityAtten * (uKd*(dot (wi, vNormal_view))) + uKs * pow (dot (halfVector, vNormal_view) , uShininess) );
+	vec3 color = vec3 (lightIntensityAtten * (uKd*(max(0, dot (wi, vNormal_view))) + uKs * pow (max(0, dot (halfVector, vNormal_view)) , uShininess) ));
 	return color;
 };
 
 void main() {
-	fFragColor = blinnPhong();
+	//fFragColor = blinnPhong();
+	fFragColor = vNormal_view;
 };

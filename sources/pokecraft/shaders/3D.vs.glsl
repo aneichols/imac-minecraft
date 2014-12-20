@@ -19,7 +19,7 @@ void main() {
   vec4 vertexNormal = vec4(aVertexNormal, 0);
 	
 	vPosition_view = vec3(uMVMatrix * vertexPosition);
-  vNormal_view = vec3(vertexNormal); //*uNormalMatrix * 
+  vNormal_view = vec3(uNormalMatrix * vertexNormal);
   vTexCoords = aVertexTexCoords;
 
  	gl_Position = uMVPMatrix * vertexPosition;
