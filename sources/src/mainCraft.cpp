@@ -8,6 +8,8 @@
 #include <glimac/common.hpp>
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
+#include "Physics.hpp"
+
 
 using namespace glimac;
 
@@ -24,8 +26,8 @@ struct CubeProgramm {
     GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uEarthTexture, uCloudTexture, uKd, uKs, uLightDir_vs, uShininess, uLightIntensity;
 
     CubeProgramm(const FilePath& applicationPath):
-        m_Program(loadProgram(applicationPath.dirPath() + "shaders/3D.vs.glsl",
-                              applicationPath.dirPath() + "shaders/normals.fs.glsl")) {
+        m_Program(loadProgram(applicationPath.dirPath() + "../shaders/3D.vs.glsl",
+                              applicationPath.dirPath() + "../shaders/normals.fs.glsl")) {
         uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
         uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
@@ -84,6 +86,8 @@ void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::iv
  ****************************************************************************************/
 
 int main(int argc, char** argv) {
+    Pokecraft::Physics::test();
+
     // Initialize SDL and open a window
     SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "pokeCraft");
     SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2); // set users mouse positioin to the center  
