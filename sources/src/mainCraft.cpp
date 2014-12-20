@@ -10,31 +10,30 @@
 #include <glimac/FreeflyCamera.hpp>
 #include "Physics.hpp"
 
-
 using namespace glimac;
 
 const GLuint VERTEX_ATTR_POSITION = 0;
 const GLuint VERTEX_ATTR_NORMAL = 1;
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
-const int nb_cubes = 1;
+const int nb_cubes = 5;
 bool isMenuEnabled = true;
 
 struct CubeProgramm {
     Program m_Program;
 
-    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uEarthTexture, uCloudTexture, uKd, uKs, uLightDir_vs, uShininess, uLightIntensity;
+    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uEarthTexture, uCloudTexture, uKd, uKs, uLightPos_vs, uShininess, uLightIntensity;
 
     CubeProgramm(const FilePath& applicationPath):
-        m_Program(loadProgram(applicationPath.dirPath() + "../shaders/3D.vs.glsl",
-                              applicationPath.dirPath() + "../shaders/normals.fs.glsl")) {
+        m_Program(loadProgram(applicationPath.dirPath() + "shaders/3D.vs.glsl",
+                              applicationPath.dirPath() + "shaders/normals.fs.glsl")) {
         uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
         uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
         uKd = glGetUniformLocation(m_Program.getGLId(), "uKd");
         uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
         uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
-        uLightDir_vs = glGetUniformLocation(m_Program.getGLId(), "uLightDir_vs");
+        uLightPos_vs = glGetUniformLocation(m_Program.getGLId(), "uLightPos_vs");
         uLightIntensity = glGetUniformLocation(m_Program.getGLId(), "uLightIntensity");
     }
 };
@@ -86,8 +85,8 @@ void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::iv
  ****************************************************************************************/
 
 int main(int argc, char** argv) {
-    Pokecraft::Physics::test();
-
+     Pokecraft::Physics::test();
+     
     // Initialize SDL and open a window
     SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "pokeCraft");
     SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2); // set users mouse positioin to the center  
@@ -129,6 +128,17 @@ int main(int argc, char** argv) {
     /*********************************
     * CAMERA INITIALIZATION
     *********************************/
+
+    /*********************************
+    * MATERIAU
+    *********************************/
+
+    glm::vec3 Kd, Ks;
+    float shininess;
+
+    Kd = glm::vec3(1.f, 1.f, 1.f);
+    Ks = glm::vec3(1.f, 1.f, 1.f);
+    shininess = 1.f;
 
     glm::mat4 MVMatrix;
     glm::mat4 NormalMatrix;
@@ -211,10 +221,19 @@ int main(int argc, char** argv) {
         projMatrix = glm::perspective(glm::radians(70.f), WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 100.f);
         MVMatrix = camera.getViewMatrix();
 
+        glBindVertexArray(vao);
         cubeProgramm.m_Program.use();
 
-        glBindVertexArray(vao);
 
+        glUniform3fv(cubeProgramm.uKs, 1, glm::value_ptr(Ks));
+        glUniform3fv(cubeProgramm.uKd, 1, glm::value_ptr(Kd));
+        glUniform1f(cubeProgramm.uShininess, 1);
+
+        glUniform3f(cubeProgramm.uLightIntensity, 10, 10, 10);
+
+        glm::vec3 position_worldspace(2, 2, 2);
+        glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 1));
+        glUniform3fv(cubeProgramm.uLightPos_vs, 1, glm::value_ptr(position_viewspace));
 
         //map or some very beautiful landscape 
         for(int i = 0; i < nb_cubes; i++){
