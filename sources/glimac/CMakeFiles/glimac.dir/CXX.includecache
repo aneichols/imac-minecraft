@@ -6,57 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac/src/cube.cpp
-cmath
--
-vector
--
+/home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac/src/FreeflyCamera.cpp
 iostream
 -
-glimac/common.hpp
-/home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac/src/glimac/common.hpp
-glimac/Cube.hpp
-/home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac/src/glimac/Cube.hpp
-
-glimac/include/glimac/Cube.hpp
-cmath
+glimac/glm.hpp
 -
-vector
+glimac/FreeflyCamera.hpp
 -
-iostream
--
-string
--
-common.hpp
-glimac/include/glimac/common.hpp
-glimac/Program.hpp
+math.h
 -
 
-glimac/include/glimac/FilePath.hpp
-string
--
-
-glimac/include/glimac/Program.hpp
-GL/glew.h
--
-Shader.hpp
-glimac/include/glimac/Shader.hpp
-FilePath.hpp
-glimac/include/glimac/FilePath.hpp
-
-glimac/include/glimac/Shader.hpp
-GL/glew.h
--
-string
--
-FilePath.hpp
-glimac/include/glimac/FilePath.hpp
-
-glimac/include/glimac/common.hpp
-GL/glew.h
--
-glm.hpp
-glimac/include/glimac/glm.hpp
+glimac/include/glimac/FreeflyCamera.hpp
 
 glimac/include/glimac/glm.hpp
 glm/glm.hpp
@@ -69,6 +29,10 @@ glm/gtc/constants.hpp
 -
 glm/gtx/io.hpp
 -
+
+third-party/include/glm/common.hpp
+detail/func_common.hpp
+third-party/include/glm/detail/func_common.hpp
 
 third-party/include/glm/detail/_fixes.hpp
 cmath
