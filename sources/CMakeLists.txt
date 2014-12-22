@@ -22,6 +22,7 @@ if(WIN32)
 
 else(WIN32)
 	find_package(SDL REQUIRED)
+    find_package(SDL_image REQUIRED)
 	find_package(GLEW REQUIRED)
 endif(WIN32)
 
@@ -32,10 +33,10 @@ endif(UPEMLV)
 
 include_directories(${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} glimac/include third-party/include)
 
-set(ALL_LIBRARIES glimac ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
-
 # Add the glimac library
 add_subdirectory(glimac)
+
+set(ALL_LIBRARIES glimac ${SDL_LIBRARY} ${SDL_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 
 # A macro to add a directory containing shaders. Each file ".glsl" is considered to be a shader and a target
 # is added to the Makefile in order to copy the shader in the build directory when it is modified

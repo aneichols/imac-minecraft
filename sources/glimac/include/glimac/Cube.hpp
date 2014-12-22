@@ -3,37 +3,36 @@
 #include <vector>
 #include <iostream>
 #include <string>
+
 #include "common.hpp"
-#include <glimac/Program.hpp>
+#include "glimac/FreeflyCamera.hpp"
+#include "glimac/Program.hpp"
+#include "glimac/Texture.hpp"
 
 namespace glimac {
 
-// Représente un Cube.
     class Cube {
 
+        GLfloat size = 1;
+        glm::vec3 position = glm::vec3(1, 1, 1);
+        Texture texture;
+
         // Alloue et construit les données (implantation dans le .cpp)
-        void build(GLfloat size);
+        void build(GLfloat size, Texture texture);
 
-        public:
-            // Constructeur: vbo + ibo.
-            Cube(GLfloat size):
-                m_nVertexCount(0) {
-                build(size); 
-            }
+     public:
+         Cube(GLfloat size, Texture texture);
 
-            // Renvoie le pointeur vers les données
-            const ShapeVertex* getDataPointer() const {
-                return &m_Vertices[0];
-            }
-            
-            // Renvoie le nombre de vertex
-            GLsizei getVertexCount() const {
-                return 36;
-            }
-            
-        private:
-            GLuint vbo, vao, ibo;
-            std::vector<ShapeVertex> m_Vertices;
-            GLsizei m_nVertexCount; // Nombre de sommets
+         void setPosition(glm::vec3 position);
+         void display(
+            glm::mat4 ProjMatrix,
+            FreeflyCamera camera,
+            glm::mat4 MVMatrix,
+            GLint uMVMatrix,
+            GLint uNormalMatrix,
+            GLint uMVPMatrix,
+            GLint uTexture,
+            GLint uSize
+        );
     };
 }
