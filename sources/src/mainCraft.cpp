@@ -9,6 +9,7 @@
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
 #include "Physics.hpp"
+#include "Sound.hpp"
 
 using namespace glimac;
 
@@ -52,7 +53,7 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
     mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 }
 
-void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::ivec2 &mousePosition){
+void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::ivec2 &mousePosition, Sound &soundPlayer){
 
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
@@ -80,13 +81,17 @@ void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::iv
     if(windowManager.isKeyPressed(SDLK_d)){
         camera.moveLeft(-0.001);
      }
+
+    if(windowManager.isKeyPressed(SDLK_SPACE)){
+        soundPlayer.play(Jump);
+     }
 }
 
 /****************************************************************************************
  ****************************************************************************************/
 
 int main(int argc, char** argv) {
-    Pokecraft::Physics::test();
+
 
 // Initialize SDL and open a window
     SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "pokeCraft");
@@ -101,6 +106,13 @@ int main(int argc, char** argv) {
 
     FilePath applicationPath(argv[0]);
 
+    /*********************************
+    * SOUNDS
+    *********************************/
+     //Initialize SDL_mixer
+    Sound soundPlayer;
+
+
 
     /*********************************
     * Objects we need
@@ -108,7 +120,6 @@ int main(int argc, char** argv) {
 
     FreeflyCamera camera;
     Cube cube(1);
-
 
     /*********************************
     * SHADERS
@@ -119,7 +130,8 @@ int main(int argc, char** argv) {
     glEnable(GL_DEPTH_TEST);
      // Dark blue background
     glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-    glDepthFunc(GL_LESS);         // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
+    // Accept fragment if it closer to the camera than the former one
 
 
 
@@ -182,6 +194,11 @@ int main(int argc, char** argv) {
     /*mouse position : default is windows center */
     glm::ivec2 mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
+
+    //testing sounds
+    soundPlayer.play(Background);
+
+
     // Application loop:
     bool done = false;
     while(!done) {
@@ -214,7 +231,7 @@ int main(int argc, char** argv) {
         }
         else{
 
-            controlGame(windowManager, camera, mousePosition);
+            controlGame(windowManager, camera, mousePosition, soundPlayer);
         }
 
         /*********************************
@@ -254,6 +271,8 @@ int main(int argc, char** argv) {
         windowManager.swapBuffers();
     }
 
+    //FIX ME !
+    soundPlayer.clean();
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
 
