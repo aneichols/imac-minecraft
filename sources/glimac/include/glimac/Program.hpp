@@ -2,7 +2,6 @@
 
 #include <GL/glew.h>
 #include "Shader.hpp"
-#include "FilePath.hpp"
 
 namespace glimac {
 
@@ -41,6 +40,10 @@ public:
 		glUseProgram(m_nGLId);
 	}
 
+	void disable() const {
+		glUseProgram(0);
+	}
+
 private:
 	Program(const Program&);
 	Program& operator =(const Program&);
@@ -49,10 +52,12 @@ private:
 };
 
 // Build a GLSL program from source code
+Program buildProgram(const GLchar* vsSrc, const GLchar* gsSrc, const GLchar* fsSrc);
 Program buildProgram(const GLchar* vsSrc, const GLchar* fsSrc);
 
-// Load source code from files and build a GLSL program
-Program loadProgram(const FilePath& vsFile, const FilePath& fsFile);
 
+// Load source code from files and build a GLSL program
+Program loadProgram(const char* vsFile, const char* gsFile, const char* fsFile);
+Program loadProgram(const char* vsFile, const char* fsFile);
 
 }

@@ -47,8 +47,43 @@ Program buildProgram(const GLchar* vsSrc, const GLchar* fsSrc) {
 	return program;
 }
 
+// Build a GLSL program from source code
+Program buildProgram(const GLchar* vsSrc, const GLchar* gsSrc, const GLchar* fsSrc) {
+	Shader vs(GL_VERTEX_SHADER);
+	vs.setSource(vsSrc);
+
+	if(!vs.compile()) {
+		throw std::runtime_error("Compilation error for vertex shader: " + vs.getInfoLog());
+	}
+
+	Shader fs(GL_FRAGMENT_SHADER);
+	fs.setSource(fsSrc);
+
+	if(!fs.compile()) {
+		throw std::runtime_error("Compilation error for fragment shader: " + fs.getInfoLog());
+	}
+
+	Shader gs(GL_GEOMETRY_SHADER);
+	gs.setSource(gsSrc);
+
+	if(!gs.compile()) {
+		throw std::runtime_error("Compilation error for geometry shader: " + gs.getInfoLog());
+	}
+
+	Program program;
+	program.attachShader(vs);
+	program.attachShader(fs);
+	program.attachShader(gs);
+
+	if(!program.link()) {
+		throw std::runtime_error("Link error: " + program.getInfoLog());
+	}
+
+	return program;
+}
+
 // Load source code from files and build a GLSL program
-Program loadProgram(const FilePath& vsFile, const FilePath& fsFile) {
+Program loadProgram(const char* vsFile, const char* fsFile) {
 	Shader vs = loadShader(GL_VERTEX_SHADER, vsFile);
 	Shader fs = loadShader(GL_FRAGMENT_SHADER, fsFile);
 
@@ -65,7 +100,38 @@ Program loadProgram(const FilePath& vsFile, const FilePath& fsFile) {
 	program.attachShader(fs);
 
 	if(!program.link()) {
-        throw std::runtime_error("Link error (for files " + vsFile.str() + " and " + fsFile.str() + "): " + program.getInfoLog());
+		throw std::runtime_error("Link error (for files " + std::string(vsFile) + " and " + fsFile + "): " + program.getInfoLog());
+	}
+
+	return program;
+}
+
+// Load source code from files and build a GLSL program
+Program loadProgram(const char* vsFile, const char* gsFile, const char* fsFile) {
+	Shader vs = loadShader(GL_VERTEX_SHADER, vsFile);
+	Shader fs = loadShader(GL_FRAGMENT_SHADER, fsFile);
+	Shader gs = loadShader(GL_GEOMETRY_SHADER, gsFile);
+
+	if(!vs.compile()) {
+		throw std::runtime_error("Compilation error for vertex shader (from file " + std::string(vsFile) + "): " + vs.getInfoLog());
+	}
+
+	if(!fs.compile()) {
+		throw std::runtime_error("Compilation error for fragment shader (from file " + std::string(fsFile) + "): " + fs.getInfoLog());
+	}
+
+	if(!gs.compile()) {
+		throw std::runtime_error("Compilation error for geometry shader (from file " + std::string(gsFile) + "): " + gs.getInfoLog());
+	}
+
+
+	Program program;
+	program.attachShader(vs);
+	program.attachShader(fs);
+	program.attachShader(gs);
+
+	if(!program.link()) {
+		throw std::runtime_error("Link error (for files " + std::string(vsFile) + ", " + gsFile + " and " + fsFile + "): " + program.getInfoLog());
 	}
 
 	return program;

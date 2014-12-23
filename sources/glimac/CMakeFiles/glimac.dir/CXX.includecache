@@ -6,7 +6,11 @@
 
 #IncludeRegexTransform: 
 
+<<<<<<< HEAD
 /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac/src/cube.cpp
+=======
+/home/alice/Documents/Pokecraft/imac-minecraft/sources/glimac/src/Cube.cpp
+>>>>>>> 2a01d311d8562f4395514ba20b8eac29b5401f91
 cmath
 -
 vector
@@ -14,9 +18,15 @@ vector
 iostream
 -
 glimac/common.hpp
+<<<<<<< HEAD
 /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac/src/glimac/common.hpp
 glimac/Cube.hpp
 /home/juliette/Programmation_compilation/openGl/pokeCraft/imac-minecraft/sources/glimac/src/glimac/Cube.hpp
+=======
+/home/alice/Documents/Pokecraft/imac-minecraft/sources/glimac/src/glimac/common.hpp
+glimac/Cube.hpp
+/home/alice/Documents/Pokecraft/imac-minecraft/sources/glimac/src/glimac/Cube.hpp
+>>>>>>> 2a01d311d8562f4395514ba20b8eac29b5401f91
 
 glimac/include/glimac/Cube.hpp
 cmath
@@ -29,20 +39,32 @@ string
 -
 common.hpp
 glimac/include/glimac/common.hpp
+glimac/FreeflyCamera.hpp
+glimac/include/glimac/glimac/FreeflyCamera.hpp
 glimac/Program.hpp
--
+glimac/include/glimac/glimac/Program.hpp
+glimac/Texture.hpp
+glimac/include/glimac/glimac/Texture.hpp
 
 glimac/include/glimac/FilePath.hpp
 string
 -
 
+<<<<<<< HEAD
+=======
+glimac/include/glimac/FreeflyCamera.hpp
+
+>>>>>>> 2a01d311d8562f4395514ba20b8eac29b5401f91
 glimac/include/glimac/Program.hpp
 GL/glew.h
 -
 Shader.hpp
 glimac/include/glimac/Shader.hpp
+<<<<<<< HEAD
 FilePath.hpp
 glimac/include/glimac/FilePath.hpp
+=======
+>>>>>>> 2a01d311d8562f4395514ba20b8eac29b5401f91
 
 glimac/include/glimac/Shader.hpp
 GL/glew.h
@@ -52,6 +74,15 @@ string
 FilePath.hpp
 glimac/include/glimac/FilePath.hpp
 
+<<<<<<< HEAD
+=======
+glimac/include/glimac/Texture.hpp
+string
+-
+GL/gl.h
+-
+
+>>>>>>> 2a01d311d8562f4395514ba20b8eac29b5401f91
 glimac/include/glimac/common.hpp
 GL/glew.h
 -

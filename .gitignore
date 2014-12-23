@@ -4,4 +4,8 @@ CMakeFiles
 Makefile
 cmake_install.cmake
 CMakeCache.txt
+<<<<<<< HEAD
 glimac/CMakeFiles
+=======
+sources/glimac/CMakeFiles/
+>>>>>>> 2a01d311d8562f4395514ba20b8eac29b5401f91
