@@ -18,6 +18,7 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const int nb_cubes = 5;
 bool isMenuEnabled = true;
+bool isSoundEnabled = true;
 
 struct CubeProgramm {
     Program m_Program;
@@ -116,6 +117,11 @@ int main(int argc, char** argv) {
     glEnable(GL_DEPTH_TEST);
     CubeProgramm cubeProgramm(applicationPath);
     glEnable(GL_DEPTH_TEST);
+     // Dark blue background
+    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+    glDepthFunc(GL_LESS);         // Accept fragment if it closer to the camera than the former one
+
+
 
     /*********************************
     * TEXTURES
@@ -231,7 +237,7 @@ int main(int argc, char** argv) {
 
         glUniform3f(cubeProgramm.uLightIntensity, 10, 10, 10);
 
-        glm::vec3 position_worldspace(2, 2, 2);
+        glm::vec3 position_worldspace(1, 1, 1);
         glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 1));
         glUniform3fv(cubeProgramm.uLightPos_vs, 1, glm::value_ptr(position_viewspace));
 
