@@ -4,7 +4,7 @@
 #include <glimac/Image.hpp>
 #include <glimac/Program.hpp>
 #include <glimac/FilePath.hpp>
-#include <glimac/Cube.hpp>
+#include <glimac/Cube_obsolete.hpp>
 #include <glimac/common.hpp>
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
