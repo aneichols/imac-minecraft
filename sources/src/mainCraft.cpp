@@ -10,6 +10,9 @@
 #include <glimac/FreeflyCamera.hpp>
 #include "Physics.hpp"
 
+#include "Sound.hpp"
+
+
 using namespace glimac;
 
 const GLuint VERTEX_ATTR_POSITION = 0;
@@ -18,25 +21,8 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const int nb_cubes = 5;
 bool isMenuEnabled = true;
+bool isSoundEnabled = true;
 
-struct CubeProgramm {
-    Program m_Program;
-
-    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uEarthTexture, uCloudTexture, uKd, uKs, uLightPos_vs, uShininess, uLightIntensity;
-
-    CubeProgramm(const FilePath& applicationPath):
-        m_Program(loadProgram(applicationPath.dirPath() + "shaders/3D.vs.glsl",
-                              applicationPath.dirPath() + "shaders/normals.fs.glsl")) {
-        uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
-        uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
-        uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
-        uKd = glGetUniformLocation(m_Program.getGLId(), "uKd");
-        uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
-        uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
-        uLightPos_vs = glGetUniformLocation(m_Program.getGLId(), "uLightPos_vs");
-        uLightIntensity = glGetUniformLocation(m_Program.getGLId(), "uLightIntensity");
-    }
-};
 
 /****************************************************************************************
 * Should these functions be in separated file ? menuControler and gameControler ?
@@ -51,7 +37,7 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
     mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 }
 
-void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::ivec2 &mousePosition){
+void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::ivec2 &mousePosition, Sound &soundPlayer){
 
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
@@ -79,15 +65,21 @@ void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::iv
     if(windowManager.isKeyPressed(SDLK_d)){
         camera.moveLeft(-0.001);
      }
+
+    if(windowManager.isKeyPressed(SDLK_SPACE)){
+        soundPlayer.play(Jump);
+     }
 }
 
 /****************************************************************************************
  ****************************************************************************************/
 
 int main(int argc, char** argv) {
-     Pokecraft::Physics::test();
-     
-    // Initialize SDL and open a window
+
+
+
+// Initialize SDL and open a window
+
     SDLWindowManager windowManager(WINDOW_WIDTH, WINDOW_HEIGHT, "pokeCraft");
     SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2); // set users mouse positioin to the center  
 
@@ -100,6 +92,13 @@ int main(int argc, char** argv) {
 
     FilePath applicationPath(argv[0]);
 
+    /*********************************
+    * SOUNDS
+    *********************************/
+     //Initialize SDL_mixer
+    Sound soundPlayer;
+
+
 
     /*********************************
     * Objects we need
@@ -108,7 +107,6 @@ int main(int argc, char** argv) {
     FreeflyCamera camera;
     Cube cube(1);
 
-
     /*********************************
     * SHADERS
     *********************************/
@@ -116,6 +114,12 @@ int main(int argc, char** argv) {
     glEnable(GL_DEPTH_TEST);
     CubeProgramm cubeProgramm(applicationPath);
     glEnable(GL_DEPTH_TEST);
+     // Dark blue background
+    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+    glDepthFunc(GL_LESS);
+    // Accept fragment if it closer to the camera than the former one
+
+
 
     /*********************************
     * TEXTURES
@@ -176,6 +180,11 @@ int main(int argc, char** argv) {
     /*mouse position : default is windows center */
     glm::ivec2 mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
+
+    //testing sounds
+    soundPlayer.play(Background);
+
+
     // Application loop:
     bool done = false;
     while(!done) {
@@ -208,7 +217,7 @@ int main(int argc, char** argv) {
         }
         else{
 
-            controlGame(windowManager, camera, mousePosition);
+            controlGame(windowManager, camera, mousePosition, soundPlayer);
         }
 
         /*********************************
@@ -231,6 +240,7 @@ int main(int argc, char** argv) {
 
         glUniform3f(cubeProgramm.uLightIntensity, 10, 10, 10);
 
+
         glm::vec3 position_worldspace(2, 2, 2);
         glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 1));
         glUniform3fv(cubeProgramm.uLightPos_vs, 1, glm::value_ptr(position_viewspace));
@@ -248,6 +258,8 @@ int main(int argc, char** argv) {
         windowManager.swapBuffers();
     }
 
+    //FIX ME !
+    soundPlayer.clean();
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
 

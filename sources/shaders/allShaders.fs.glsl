@@ -28,5 +28,5 @@ vec3 blinnPhong(){
 
 void main() {
 	//fFragColor = blinnPhong();
-	fFragColor = vNormal_view;
+	fFragColor = vNormal_view * blinnPhong();
 };
