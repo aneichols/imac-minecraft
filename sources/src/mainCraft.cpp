@@ -245,7 +245,7 @@ int main(int argc, char** argv) {
 
 
         controlGame(windowManager, player, mousePosition, soundPlayer);
-
+        }
 
         /*********************************
          * RENDERING CODE
