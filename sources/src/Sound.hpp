@@ -2,9 +2,9 @@
 #include <string.h>
 #include <SDL/SDL_mixer.h>
 
-namespace glimac {
+namespace Pokecraft {
 
-	enum sounds {Jump, Walk, Crash, Background}; //  0 1 2
+	enum Sounds {JUMP, WALK, CRASH, BACKGROUND}; //  0 1 2
 	class Sound {
 
 		int build();
@@ -25,8 +25,7 @@ namespace glimac {
       Sound() {
           build();
       }
-			void play(sounds s);
-			void stop(sounds s);
+			void play(Sounds s);
 			int  loadSounds();
 			void clean();
 			void setEnable(bool isEnabled);
