@@ -12,6 +12,7 @@
 #include "Physics.hpp"
 #include "Sound.hpp"
 #include "Player.hpp"
+#include "Timer.hpp"
 
 using namespace glimac;
 
@@ -19,7 +20,8 @@ const GLuint VERTEX_ATTR_POSITION = 0;
 const GLuint VERTEX_ATTR_NORMAL = 1;
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
-const int nb_cubes = 5;
+const int FPS = 30;
+const int nb_cubes = 1;
 bool isMenuEnabled = true;
 bool isSoundEnabled = true;
 
@@ -30,6 +32,7 @@ struct CubeProgramm {
 
     CubeProgramm(const FilePath& applicationPath):
         m_Program(loadProgram(applicationPath.dirPath() + "shaders/3D.vs.glsl",
+							  applicationPath.dirPath() + "shaders/nothing.gs.glsl",
                               applicationPath.dirPath() + "shaders/allShaders.fs.glsl")) {
         uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
@@ -53,49 +56,44 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
     /* reset mouse position if user choose to launch the game */
     SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
     mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+
+	// TODO always keep the mouse inside the window
 }
 
-void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mousePosition, Sound &soundPlayer){
-
-
+void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mousePosition, Pokecraft::Sound &soundPlayer){
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
     player.rotateUp(-offset.y);
     player.rotateLeft(-offset.x);
     mousePosition = mousePosition_actual;
 
-/*
-*   TODO : bug chiant : si on fait un tour complet sur soi, la cémara devient folle !
-*/
-
     if(windowManager.isKeyPressed(SDLK_SPACE)){
-        player.jump(0.001);
-     }
+       player.jump(0.1);
+    }
 
     if(windowManager.isKeyPressed(SDLK_z)){
-        player.moveFront(0.001);
-     }
+       player.moveFront(0.1);
+    }
 
     if(windowManager.isKeyPressed(SDLK_s)){
-        player.moveFront(-0.001);
-     }
+       player.moveFront(-0.1);
+    }
 
     if(windowManager.isKeyPressed(SDLK_q)){
-        player.moveLeft(0.001);
-     }
-
+       player.moveLeft(0.1);
+    }
 
     if(windowManager.isKeyPressed(SDLK_d)){
-        player.moveLeft(-0.001);
-     }
+       player.moveLeft(-0.1);
+    }
 
     if(windowManager.isKeyPressed(SDLK_SPACE)){
-        soundPlayer.play(Jump);
-     }
+       soundPlayer.play(Pokecraft::JUMP);
+    }
 
-        if(windowManager.isKeyPressed(SDLK_SPACE)){
-        soundPlayer.play(Jump);
-     }
+    if(windowManager.isKeyPressed(SDLK_SPACE)){
+       soundPlayer.play(Pokecraft::JUMP);
+    }
 }
 
 /****************************************************************************************
@@ -120,8 +118,13 @@ int main(int argc, char** argv) {
     /*********************************
     * SOUNDS
     *********************************/
-     //Initialize SDL_mixer
-    Sound soundPlayer;
+    Pokecraft::Sound soundPlayer;
+
+
+    /*********************************
+    * TIMER
+    *********************************/
+	Pokecraft::Timer timer(FPS);
 
 
 
@@ -208,7 +211,7 @@ int main(int argc, char** argv) {
 
 
     //testing sounds
-    soundPlayer.play(Background);
+    soundPlayer.play(Pokecraft::BACKGROUND);
 
 
     // Application loop:
@@ -242,9 +245,7 @@ int main(int argc, char** argv) {
             controlMenu(windowManager, mousePosition);
         }
         else{
-
-
-        controlGame(windowManager, player, mousePosition, soundPlayer);
+        	controlGame(windowManager, player, mousePosition, soundPlayer);
         }
 
         /*********************************
@@ -282,6 +283,8 @@ int main(int argc, char** argv) {
         }
         glBindVertexArray(0);
         windowManager.swapBuffers();
+
+		timer.sleepUntilNextTick();
     }
 
     //FIX ME !

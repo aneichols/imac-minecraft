@@ -4,7 +4,7 @@
 #include "Sound.hpp"
 #include <SDL/SDL_mixer.h>
 
-namespace glimac {
+namespace Pokecraft {
 
 	int Sound::build() {
 
@@ -16,7 +16,7 @@ namespace glimac {
 		return 0;
 	}
 
-	void Sound::play(sounds s){
+	void Sound::play(Sounds s){
 		if (!isEnabled){return;}
 		if(s == 3){Mix_PlayMusic( backgroundMusic, -1 );}
 		else Mix_PlayChannel( -1, soundEffects[s], 0 );
