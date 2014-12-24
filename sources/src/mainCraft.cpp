@@ -13,6 +13,7 @@
 #include "Sound.hpp"
 #include "Player.hpp"
 #include "Timer.hpp"
+#include "Menu.hpp"
 
 using namespace glimac;
 
@@ -22,8 +23,6 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const int FPS = 30;
 const int nb_cubes = 1;
-bool isMenuEnabled = true;
-bool isSoundEnabled = true;
 
 struct CubeProgramm {
     Program m_Program;
@@ -49,13 +48,59 @@ struct CubeProgramm {
 * Should these functions be in separated file ? menuControler and gameControler ?
  ****************************************************************************************/
 
-void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
-    std::cout << "menu" << std::endl;
-    isMenuEnabled = false;
+void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition, Pokecraft::Menu &menu){
+    switch (menu.getState()){
+        case 0 : //SETTINGS
+            if(windowManager.isKeyPressed(SDLK_y)){
+                menu.setSound(true);
+            }
+            if(windowManager.isKeyPressed(SDLK_n)){
+                 menu.setSound(false);
+            }
+
+            if(windowManager.isKeyPressed(SDLK_BACKSPACE)){
+                 menu.setState(Pokecraft::ROOT);
+            }
+            std::cout << "settings" << std::endl;
+            break;
+        case 1 : // CHOOSEPLAYER
+            if(windowManager.isKeyPressed(SDLK_BACKSPACE)){
+                 menu.setState(Pokecraft::ROOT);
+            }
+
+            /* peut etre optimisé */
+            if(windowManager.isKeyPressed(SDLK_r)){
+                std::cout << "player r" << std::endl;
+                menu.launchGame();
+                menu.setState(Pokecraft::GAME);
+            }
+            if(windowManager.isKeyPressed(SDLK_g)){
+                std::cout << "player g" << std::endl;
+                menu.launchGame();
+                menu.setState(Pokecraft::GAME);
+            }
+            if(windowManager.isKeyPressed(SDLK_b)){
+                std::cout << "player b" << std::endl;
+                menu.launchGame();
+                menu.setState(Pokecraft::GAME);
+            }
+            /* ********************/
+
+            std::cout << "choose player" << std::endl;
+            break;
+        case 2 : //ROOT
+            if(windowManager.isKeyPressed(SDLK_s)){
+                menu.setState(Pokecraft::SETTINGS);
+            }
+            if(windowManager.isKeyPressed(SDLK_l)){
+                menu.setState(Pokecraft::CHOOSEPLAYER);
+            }
+            break;
+    }
 
     /* reset mouse position if user choose to launch the game */
-    SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-    mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    //SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    //mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
 	// TODO always keep the mouse inside the window
 }
@@ -132,7 +177,7 @@ int main(int argc, char** argv) {
     * Objects we need
     *********************************/
 
-    //FreeflyCamera camera;
+    Pokecraft::Menu menu(soundPlayer);
     Player player(glm::vec3 (0,0,0));
     Cube cube(1);
 
@@ -209,11 +254,6 @@ int main(int argc, char** argv) {
     /*mouse position : default is windows center */
     glm::ivec2 mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-
-    //testing sounds
-    soundPlayer.play(Pokecraft::BACKGROUND);
-
-
     // Application loop:
     bool done = false;
     while(!done) {
@@ -223,7 +263,6 @@ int main(int argc, char** argv) {
             if(e.type == SDL_QUIT) {
                 done = true;
             }
-
             if(e.type == SDL_MOUSEBUTTONDOWN){
                 mousePosition = windowManager.getMousePosition();
             }
@@ -241,11 +280,11 @@ int main(int argc, char** argv) {
         *
          **************************************/
 
-        if(isMenuEnabled){
-            controlMenu(windowManager, mousePosition);
+        if(menu.getState() == Pokecraft::GAME){
+            controlGame(windowManager, player, mousePosition, soundPlayer);
         }
         else{
-        	controlGame(windowManager, player, mousePosition, soundPlayer);
+            controlMenu(windowManager, mousePosition, menu);
         }
 
         /*********************************
