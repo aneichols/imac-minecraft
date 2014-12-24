@@ -31,7 +31,6 @@ namespace glimac {
             glm::vec3(-1.0, 1.0, 1.0),   glm::vec3(-1.0, 1.0, -1.0),   glm::vec3(1.0, 1.0, -1.0),       // Face 6
 
 
-
         };
 
         glm::vec3 normals[] = {

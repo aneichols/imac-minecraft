@@ -8,8 +8,10 @@
 #include <glimac/common.hpp>
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
+
 #include "Physics.hpp"
 #include "Sound.hpp"
+#include "Player.hpp"
 
 using namespace glimac;
 
@@ -53,33 +55,38 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
     mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 }
 
-void controlGame(SDLWindowManager &windowManager, FreeflyCamera &camera, glm::ivec2 &mousePosition, Sound &soundPlayer){
+void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mousePosition, Sound &soundPlayer){
+
 
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
-    camera.rotateUp(-offset.y);
-    camera.rotateLeft(-offset.x);
+    player.rotateUp(-offset.y);
+    player.rotateLeft(-offset.x);
     mousePosition = mousePosition_actual;
 
 /*
 *   TODO : bug chiant : si on fait un tour complet sur soi, la cémara devient folle !
 */
 
+    if(windowManager.isKeyPressed(SDLK_SPACE)){
+        player.jump(0.001);
+     }
+
     if(windowManager.isKeyPressed(SDLK_z)){
-        camera.moveFront(0.001);
+        player.moveFront(0.001);
      }
 
     if(windowManager.isKeyPressed(SDLK_s)){
-        camera.moveFront(-0.001);
+        player.moveFront(-0.001);
      }
 
     if(windowManager.isKeyPressed(SDLK_q)){
-        camera.moveLeft(0.001);
+        player.moveLeft(0.001);
      }
 
 
     if(windowManager.isKeyPressed(SDLK_d)){
-        camera.moveLeft(-0.001);
+        player.moveLeft(-0.001);
      }
 
     if(windowManager.isKeyPressed(SDLK_SPACE)){
@@ -122,7 +129,8 @@ int main(int argc, char** argv) {
     * Objects we need
     *********************************/
 
-    FreeflyCamera camera;
+    //FreeflyCamera camera;
+    Player player(glm::vec3 (0,0,0));
     Cube cube(1);
 
     /*********************************
@@ -235,8 +243,9 @@ int main(int argc, char** argv) {
         }
         else{
 
-            controlGame(windowManager, camera, mousePosition, soundPlayer);
-        }
+
+        controlGame(windowManager, player, mousePosition, soundPlayer);
+
 
         /*********************************
          * RENDERING CODE
@@ -246,7 +255,7 @@ int main(int argc, char** argv) {
         glBindVertexArray(vao);
 
         projMatrix = glm::perspective(glm::radians(70.f), WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 100.f);
-        MVMatrix = camera.getViewMatrix();
+        MVMatrix = player.camera.getViewMatrix();
 
         glBindVertexArray(vao);
         cubeProgramm.m_Program.use();
