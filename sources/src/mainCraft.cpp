@@ -1,39 +1,42 @@
 #include <iostream>
+#include <vector>
 #include <GL/glew.h>
 #include <glimac/SDLWindowManager.hpp>
 #include <glimac/Image.hpp>
 #include <glimac/Program.hpp>
 #include <glimac/FilePath.hpp>
-#include <glimac/Cube_obsolete.hpp>
+#include <glimac/Cube.hpp>
 #include <glimac/common.hpp>
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
+
 
 #include "Physics.hpp"
 #include "Sound.hpp"
 #include "Player.hpp"
 #include "Timer.hpp"
 
+
 using namespace glimac;
 
 const GLuint VERTEX_ATTR_POSITION = 0;
-const GLuint VERTEX_ATTR_NORMAL = 1;
+//const GLuint VERTEX_ATTR_NORMAL = 1;
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const int FPS = 30;
-const int nb_cubes = 1;
+const int nb_cubes = 5;
 bool isMenuEnabled = true;
 bool isSoundEnabled = true;
 
 struct CubeProgramm {
     Program m_Program;
 
-    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uEarthTexture, uCloudTexture, uKd, uKs, uLightPos_vs, uShininess, uLightIntensity;
+    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uEarthTexture, uCloudTexture, uKd, uKs, uLightPos_vs, uShininess, uLightIntensity, uCameraPos;
 
     CubeProgramm(const FilePath& applicationPath):
-        m_Program(loadProgram(applicationPath.dirPath() + "shaders/3D.vs.glsl",
-							  applicationPath.dirPath() + "shaders/nothing.gs.glsl",
-                              applicationPath.dirPath() + "shaders/allShaders.fs.glsl")) {
+        m_Program(loadProgram(applicationPath.dirPath() + "shaders/cube.vs.glsl",
+							  applicationPath.dirPath() + "shaders/cube.gs.glsl",
+                              applicationPath.dirPath() + "shaders/cube.fs.glsl")) {
         uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
         uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
@@ -42,6 +45,7 @@ struct CubeProgramm {
         uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
         uLightPos_vs = glGetUniformLocation(m_Program.getGLId(), "uLightPos_vs");
         uLightIntensity = glGetUniformLocation(m_Program.getGLId(), "uLightIntensity");
+        uCameraPos = glGetUniformLocation(m_Program.getGLId(), "uCameraPos");
     }
 };
 
@@ -134,7 +138,17 @@ int main(int argc, char** argv) {
 
     //FreeflyCamera camera;
     Player player(glm::vec3 (0,0,0));
-    Cube cube(1);
+
+    std::vector<Cube> cubes;
+
+    for(int i = 0; i < nb_cubes; i++){
+        if(i%2) cubes.push_back (Cube(1, Texture::load("assets/textures/brick.png")));
+        else cubes.push_back (Cube(1, Texture::load("assets/textures/head3.png")));
+    }
+
+    for(int i = 0; i < nb_cubes; i++){
+        cubes.at(i).setPosition(glm::vec3(1, i, 1));
+    }
 
     /*********************************
     * SHADERS
@@ -169,7 +183,7 @@ int main(int argc, char** argv) {
     glm::vec3 Kd, Ks;
     float shininess;
 
-    Kd = glm::vec3(1.f, 1.f, 1.f);
+    Kd = glm::vec3(1.f, 1.f, 1.f); // replace by texture ! oh yeah
     Ks = glm::vec3(1.f, 1.f, 1.f);
     shininess = 1.f;
 
@@ -186,7 +200,20 @@ int main(int argc, char** argv) {
     /*********************************
      * INITIALIZATION CODE
      *********************************/
+    /*
 
+    TODO SEND CUBES POSITIONS
+    GLuint vbo, vao;
+    glGenBuffers (1, &vbo);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid *) offsetof(ShapeVertex, position));
+    
+    */
+
+/*
     GLuint vbo, vao;
     glGenBuffers (1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -204,7 +231,7 @@ int main(int argc, char** argv) {
 
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    glBindVertexArray(0);*/
 
     /*mouse position : default is windows center */
     glm::ivec2 mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -253,20 +280,21 @@ int main(int argc, char** argv) {
          *********************************/
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glBindVertexArray(vao);
+        //glBindVertexArray(vao);
 
         projMatrix = glm::perspective(glm::radians(70.f), WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 100.f);
         MVMatrix = player.camera.getViewMatrix();
 
-        glBindVertexArray(vao);
+        //glBindVertexArray(vao);
         cubeProgramm.m_Program.use();
 
 
         glUniform3fv(cubeProgramm.uKs, 1, glm::value_ptr(Ks));
-        glUniform3fv(cubeProgramm.uKd, 1, glm::value_ptr(Kd));
+        glUniform3fv(cubeProgramm.uKd, 1, glm::value_ptr(Kd)); // no need anymore
+        glUniform3fv(cubeProgramm.uCameraPos, 1, glm::value_ptr(player.camera.getViewMatrix()));
         glUniform1f(cubeProgramm.uShininess, 1);
 
-        glUniform3f(cubeProgramm.uLightIntensity, 10, 10, 10);
+        glUniform3f(cubeProgramm.uLightIntensity, 1, 1, 1);
 
         glm::vec3 position_worldspace(1, 1, 1);
         glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 1));
@@ -275,13 +303,14 @@ int main(int argc, char** argv) {
         //map or some very beautiful landscape 
         for(int i = 0; i < nb_cubes; i++){
             glm::mat4 cubeMVMatrix = MVMatrix;
-            cubeMVMatrix = glm::translate(cubeMVMatrix, glm::vec3( 0, 0 , -3.f)); 
+            cubeMVMatrix = glm::translate(cubeMVMatrix, glm::vec3( 0, 0 , -3.f));
             glUniformMatrix4fv(cubeProgramm.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(projMatrix * cubeMVMatrix));
             glUniformMatrix4fv(cubeProgramm.uMVMatrix, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
             glUniformMatrix4fv(cubeProgramm.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(cubeMVMatrix))));
-            glDrawArrays(GL_TRIANGLES, 0, cube.getVertexCount());
+            glBindTexture(GL_TEXTURE_2D, cubes.at(i).getTexture().getId());
+            glDrawArrays(GL_POINTS, 0, 3);
         }
-        glBindVertexArray(0);
+        //glBindVertexArray(0);
         windowManager.swapBuffers();
 
 		timer.sleepUntilNextTick();
@@ -289,8 +318,8 @@ int main(int argc, char** argv) {
 
     //FIX ME !
     soundPlayer.clean();
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
+    //glDeleteBuffers(1, &vbo);
+    //glDeleteVertexArrays(1, &vao);
 
     return EXIT_SUCCESS;
 }

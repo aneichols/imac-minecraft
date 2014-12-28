@@ -5,12 +5,19 @@
 #include "glimac/Cube.hpp"
 
 namespace glimac {
-    Cube::Cube(GLfloat size, Texture texture): size(size), texture(texture) {
-    }
+    Cube::Cube(GLfloat size, Texture texture): size(size), texture(texture) {}
          
-    void Cube::setPosition(glm::vec3 position) {
+    void Cube::setPosition(glm::vec3 position){
         this->position = position;
     }
+
+    glm::vec3 Cube::getPosition(){
+        return this->position;
+    }
+
+
+    Texture Cube::getTexture(){ return this->texture;}
+
 
     void Cube::display(
         glm::mat4 ProjMatrix,
