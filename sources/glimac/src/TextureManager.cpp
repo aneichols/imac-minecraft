@@ -1,4 +1,3 @@
-
 #include "glimac/TextureManager.hpp"
 
 namespace glimac {

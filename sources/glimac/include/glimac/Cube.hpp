@@ -33,8 +33,7 @@ namespace glimac {
             GLint uMVMatrix,
             GLint uNormalMatrix,
             GLint uMVPMatrix,
-            GLint uTexture,
-            GLint uSize
+            GLint uTexture
         );
     };
 }

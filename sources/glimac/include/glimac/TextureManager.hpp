@@ -8,7 +8,7 @@
 #include "Texture.hpp"
 
 namespace glimac {
-	class TextureManager: std::map<std::string, Texture> {
+	class TextureManager: public std::map<std::string, Texture> {
 	public:
 		const Texture& get(std::string path);
 

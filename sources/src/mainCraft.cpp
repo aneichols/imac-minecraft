@@ -6,9 +6,11 @@
 #include <glimac/Program.hpp>
 #include <glimac/FilePath.hpp>
 #include <glimac/Cube.hpp>
+#include <glimac/Map.hpp>
 #include <glimac/common.hpp>
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
+#include <glimac/TextureManager.hpp>
 
 
 #include "Physics.hpp"
@@ -31,7 +33,7 @@ bool isSoundEnabled = true;
 struct CubeProgramm {
     Program m_Program;
 
-    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uEarthTexture, uCloudTexture, uKd, uKs, uLightPos_vs, uShininess, uLightIntensity, uCameraPos;
+    GLint uMVPMatrix, uMVMatrix, uNormalMatrix,uTexture, uKd, uKs, uLightPos_vs, uShininess, uLightIntensity, uCameraPos;
 
     CubeProgramm(const FilePath& applicationPath):
         m_Program(loadProgram(applicationPath.dirPath() + "shaders/cube.vs.glsl",
@@ -40,6 +42,7 @@ struct CubeProgramm {
         uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
         uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
+        uTexture = glGetUniformLocation(m_Program.getGLId(), "uTexture");
         uKd = glGetUniformLocation(m_Program.getGLId(), "uKd");
         uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
         uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
@@ -137,9 +140,12 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,0,0));
+    Player player(glm::vec3 (0,2,0));
+    Map map;
 
     std::vector<Cube> cubes;
+    TextureManager textureManager;
+    textureManager.insert(std::pair<std::string, Texture>("assets/textures/brick.png",Texture::load("assets/textures/brick.png")));
 
     for(int i = 0; i < nb_cubes; i++){
         if(i%2) cubes.push_back (Cube(1, Texture::load("assets/textures/brick.png")));
@@ -200,38 +206,7 @@ int main(int argc, char** argv) {
     /*********************************
      * INITIALIZATION CODE
      *********************************/
-    /*
-
-    TODO SEND CUBES POSITIONS
-    GLuint vbo, vao;
-    glGenBuffers (1, &vbo);
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid *) offsetof(ShapeVertex, position));
-    
-    */
-
-/*
-    GLuint vbo, vao;
-    glGenBuffers (1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, cube.getVertexCount() * sizeof(ShapeVertex),cube.getDataPointer(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-    glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid *) offsetof(ShapeVertex, position));
-    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid *) offsetof(ShapeVertex, normal));
-
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);*/
+   
 
     /*mouse position : default is windows center */
     glm::ivec2 mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -283,7 +258,7 @@ int main(int argc, char** argv) {
         //glBindVertexArray(vao);
 
         projMatrix = glm::perspective(glm::radians(70.f), WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 100.f);
-        MVMatrix = player.camera.getViewMatrix();
+        MVMatrix = glm::mat4(1);
 
         //glBindVertexArray(vao);
         cubeProgramm.m_Program.use();
@@ -302,14 +277,24 @@ int main(int argc, char** argv) {
 
         //map or some very beautiful landscape 
         for(int i = 0; i < nb_cubes; i++){
-            glm::mat4 cubeMVMatrix = MVMatrix;
-            cubeMVMatrix = glm::translate(cubeMVMatrix, glm::vec3( 0, 0 , -3.f));
-            glUniformMatrix4fv(cubeProgramm.uMVPMatrix, 1, GL_FALSE, glm::value_ptr(projMatrix * cubeMVMatrix));
-            glUniformMatrix4fv(cubeProgramm.uMVMatrix, 1, GL_FALSE, glm::value_ptr(cubeMVMatrix));
-            glUniformMatrix4fv(cubeProgramm.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(cubeMVMatrix))));
-            glBindTexture(GL_TEXTURE_2D, cubes.at(i).getTexture().getId());
-            glDrawArrays(GL_POINTS, 0, 3);
+            cubes.at(i).display(projMatrix, 
+                                player.camera, 
+                                MVMatrix, 
+                                cubeProgramm.uMVMatrix, 
+                                cubeProgramm.uNormalMatrix, 
+                                cubeProgramm.uMVPMatrix, 
+                                cubeProgramm.uTexture
+                                );
         }
+        map.display(projMatrix, 
+                    player.camera, 
+                    MVMatrix, 
+                    cubeProgramm.uMVMatrix, 
+                    cubeProgramm.uNormalMatrix, 
+                    cubeProgramm.uMVPMatrix, 
+                    cubeProgramm.uTexture,
+                    textureManager
+                    );
         //glBindVertexArray(0);
         windowManager.swapBuffers();
 
