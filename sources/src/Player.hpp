@@ -13,7 +13,6 @@ namespace glimac {
       Player(glm::vec3 position) {
           build(position);
       }
-
       State state = unMoving;
 			FreeflyCamera camera;
 
@@ -23,8 +22,11 @@ namespace glimac {
 			void rotateUp(float degrees);
 			void jump(float t);
 			void display();
+			void updateAlt(float t);
 
 		private:
 			glm::vec3 position;
+			float threshold;
+			float alt;
 	};
 }

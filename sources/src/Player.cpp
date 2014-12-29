@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h> 
 #include <GL/glew.h>
 #include <glimac/glm.hpp>
 #include "Player.hpp"
@@ -11,6 +12,29 @@ namespace glimac {
 	void Player::build(glm::vec3 position) {
 		this->position = position;
 		std::cout << "player builded" << std::endl;
+		alt = 0.f;
+		threshold = 1.5f;
+	}
+
+	void Player::updateAlt(float t){
+		if(state != Jumping && state != Falling) return;
+
+		if(state == Jumping){
+			if(0 >= (threshold - alt)){
+				state = Falling;
+			}else{
+				alt += t;
+				camera.moveUp(0.1 * cos(t));
+			}
+		}
+
+		if(state == Falling){
+			alt -= t;
+			camera.moveUp(0.1 * -cos(t));
+			if(alt <= 0){
+				state = unMoving;
+			}
+		}
 	}
 
 	void Player::moveFront(float t){
@@ -29,8 +53,9 @@ namespace glimac {
 		camera.rotateLeft(degrees);
 	}
 
-	void Player::jump(float degrees){
+	void Player::jump(float t){
 		if (state == Jumping || state == Falling) return;
+		state = Jumping;
 	}
 
 	void Player::display(){

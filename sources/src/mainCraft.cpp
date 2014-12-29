@@ -66,11 +66,8 @@ void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mo
     player.rotateUp(-offset.y);
     player.rotateLeft(-offset.x);
     mousePosition = mousePosition_actual;
-
-    if(windowManager.isKeyPressed(SDLK_SPACE)){
-       player.jump(0.1);
-    }
-
+    player.updateAlt(0.1);
+    
     if(windowManager.isKeyPressed(SDLK_z)){
        player.moveFront(0.1);
     }
@@ -89,10 +86,7 @@ void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mo
 
     if(windowManager.isKeyPressed(SDLK_SPACE)){
        soundPlayer.play(Pokecraft::JUMP);
-    }
-
-    if(windowManager.isKeyPressed(SDLK_SPACE)){
-       soundPlayer.play(Pokecraft::JUMP);
+       player.jump(0.1f);
     }
 }
 

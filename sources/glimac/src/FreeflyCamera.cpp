@@ -47,6 +47,10 @@ namespace glimac {
     m_Position += t * m_FrontVector;
   }
 
+  void FreeflyCamera::moveUp(float t) {
+    m_Position += t * m_UpVector;
+  }
+
   void FreeflyCamera::rotateLeft(float degrees) {
     float radians = degrees_to_radians(degrees);
     m_fPhi += radians;
