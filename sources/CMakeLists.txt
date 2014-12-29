@@ -11,6 +11,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH  ${PROJECT_BINARY_DIR}/lib)
 
 find_package(OpenGL REQUIRED)
+find_package(OpenCV REQUIRED)
 
 if(WIN32)
         set(SDL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/third-party/include/Windows)
@@ -38,7 +39,7 @@ include_directories(${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR}
 add_subdirectory(glimac)
 
 
-set(ALL_LIBRARIES glimac ${SDL_LIBRARY} ${SDL_IMAGE_LIBRARY} ${SDL_MIXER_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
+set(ALL_LIBRARIES glimac ${SDL_LIBRARY} ${SDL_IMAGE_LIBRARY} ${SDL_MIXER_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${OpenCV_LIBS})
 
 
 # A macro to add a directory containing shaders. Each file ".glsl" is considered to be a shader and a target
