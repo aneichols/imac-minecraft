@@ -32,7 +32,6 @@ namespace glimac {
   }
 
   FreeflyCamera::FreeflyCamera() {
-    m_Position = glm::vec3(0, 0, 0);
     m_fPhi = glm::pi<float>();
     m_fTheta = 0;
 
@@ -49,6 +48,10 @@ namespace glimac {
 
   void FreeflyCamera::moveUp(float t) {
     m_Position += t * m_UpVector;
+  }
+
+  void FreeflyCamera::setPosition(glm::vec3 position){
+    m_Position = position;
   }
 
   void FreeflyCamera::rotateLeft(float degrees) {

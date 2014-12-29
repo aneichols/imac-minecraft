@@ -11,6 +11,7 @@ namespace glimac {
 
 	void Player::build(glm::vec3 position) {
 		this->position = position;
+		this->camera.setPosition(position);
 		std::cout << "player builded" << std::endl;
 		alt = 0.f;
 		threshold = 1.5f;
