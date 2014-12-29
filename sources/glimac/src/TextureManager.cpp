@@ -12,7 +12,7 @@ namespace glimac {
 		return (*this)[path];
 	}
 
-	TextureManager::~TextureManager() {
+	void TextureManager::deleteTexture() {
 		for(std::map<std::string, Texture>::iterator it = this->begin(); it != this->end(); it++){
 			(it->second).free();
 		}

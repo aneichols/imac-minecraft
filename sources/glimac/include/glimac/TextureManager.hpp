@@ -12,7 +12,8 @@ namespace glimac {
 	public:
 		const Texture& get(std::string path);
 
-		~TextureManager();
+		//~TextureManager();
+		void deleteTexture();
 	};
 }
 

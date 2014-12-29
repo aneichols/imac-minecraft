@@ -299,6 +299,6 @@ int main(int argc, char** argv) {
     soundPlayer.clean();
     //glDeleteBuffers(1, &vbo);
     //glDeleteVertexArrays(1, &vao);
-
+    textureManager.deleteTexture();
     return EXIT_SUCCESS;
 }
