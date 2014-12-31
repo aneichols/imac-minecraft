@@ -33,7 +33,7 @@ bool isSoundEnabled = true;
 struct CubeProgramm {
     Program m_Program;
 
-    GLint uMVPMatrix, uMVMatrix, uNormalMatrix,uTexture, uKd, uKs, uLightPos_vs, uShininess, uLightIntensity, uCameraPos;
+    GLint uMVPMatrix, uMVMatrix, uNormalMatrix,uTexture, uKd, uKs, uLightDir_vs, uShininess, uLightIntensity, uCameraPos;
 
     CubeProgramm(const FilePath& applicationPath):
         m_Program(loadProgram(applicationPath.dirPath() + "shaders/cube.vs.glsl",
@@ -46,7 +46,7 @@ struct CubeProgramm {
         uKd = glGetUniformLocation(m_Program.getGLId(), "uKd");
         uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
         uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
-        uLightPos_vs = glGetUniformLocation(m_Program.getGLId(), "uLightPos_vs");
+        uLightDir_vs = glGetUniformLocation(m_Program.getGLId(), "uLightDir_vs");
         uLightIntensity = glGetUniformLocation(m_Program.getGLId(), "uLightIntensity");
         uCameraPos = glGetUniformLocation(m_Program.getGLId(), "uCameraPos");
     }
@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
 
 
     //testing sounds
-    soundPlayer.play(Pokecraft::BACKGROUND);
+    //soundPlayer.play(Pokecraft::BACKGROUND);
 
 
     // Application loop:
@@ -261,13 +261,13 @@ int main(int argc, char** argv) {
         glUniform3fv(cubeProgramm.uKs, 1, glm::value_ptr(Ks));
         glUniform3fv(cubeProgramm.uKd, 1, glm::value_ptr(Kd)); // no need anymore
         glUniform3fv(cubeProgramm.uCameraPos, 1, glm::value_ptr(player.camera.getViewMatrix()));
-        glUniform1f(cubeProgramm.uShininess, 1);
+        glUniform1f(cubeProgramm.uShininess, 50);
 
-        glUniform3f(cubeProgramm.uLightIntensity, 1, 1, 1);
+        glUniform3f(cubeProgramm.uLightIntensity, 0.4, 0.6, 0.6);
 
         glm::vec3 position_worldspace(1, 1, 1);
-        glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 1));
-        glUniform3fv(cubeProgramm.uLightPos_vs, 1, glm::value_ptr(position_viewspace));
+        glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 0));
+        glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
 
         //map or some very beautiful landscape 
         for(int i = 0; i < nb_cubes; i++){
