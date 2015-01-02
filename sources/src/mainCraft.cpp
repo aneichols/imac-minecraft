@@ -96,8 +96,11 @@ void controlGame(   SDLWindowManager &windowManager,
                     Player &player,
                     glm::ivec2 &mousePosition,
                     Pokecraft::Sound &soundPlayer,
-                    Map &map){
-    Texture skyTexture = Texture::load("assets/textures/sky.jpg");
+                    Map &map,
+                    TextureManager &textureManager,
+                    int &currentText
+                    ){
+    
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
     player.rotateUp(-offset.y);
@@ -126,8 +129,12 @@ void controlGame(   SDLWindowManager &windowManager,
        player.jump(0.1f);
     }
 
+    if(windowManager.isMouseButtonPressed(SDL_BUTTON_WHEELUP) || windowManager.isMouseButtonPressed(SDL_BUTTON_WHEELDOWN)){
+        std::cout << "molette" << std::endl;
+    }
+
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
-        map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), skyTexture);
+       map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), textureManager.get("assets/textures/head1.png"));
     }
 
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)){
@@ -202,8 +209,9 @@ int main(int argc, char** argv) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-
+/*
     std::vector<Cube> cubes;
+
     textureManager.insert(std::pair<std::string, Texture>("assets/textures/brick.png", Texture::load("assets/textures/brick.png")));
 
     for(int i = 0; i < nb_cubes; i++){
@@ -213,7 +221,7 @@ int main(int argc, char** argv) {
 
     for(int i = 0; i < nb_cubes; i++){
         cubes.at(i).setPosition(glm::vec3(1, i, 1));
-    }
+    }*/
 
     /*********************************
     * SHADERS
@@ -232,6 +240,7 @@ int main(int argc, char** argv) {
     /*********************************
     * TEXTURES
     *********************************/
+    int currentText = 0;
 
     /*********************************
     * UNIFORM VAR
@@ -306,7 +315,7 @@ int main(int argc, char** argv) {
             controlMenu(windowManager, mousePosition);
         }
         else{
-        	controlGame(windowManager, player, mousePosition, soundPlayer, map);
+        	controlGame(windowManager, player, mousePosition, soundPlayer, map, textureManager ,currentText);
         }
 
         /*********************************
@@ -335,7 +344,7 @@ int main(int argc, char** argv) {
         glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
 
         //map or some very beautiful landscape
-       /* for(int i = 0; i < nb_cubes; i++){
+        /*for(int i = 0; i < nb_cubes; i++){
             cubes.at(i).display(projMatrix, 
                                 player.camera, 
                                 MVMatrix, 

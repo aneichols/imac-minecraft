@@ -54,7 +54,7 @@ namespace glimac {
 
 	}
 
-	void Map::addCube(glm::ivec3 position, Texture &text){
+	void Map::addCube(glm::ivec3 position, const Texture &text){
 		CubeAtom cubeAtom;
 		cubeAtom.position = glm::vec3(position);
 		cubeAtom.tex_id = text.getId();

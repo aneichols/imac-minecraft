@@ -28,7 +28,7 @@ namespace glimac {
 			buildMap(textureManager);
 		}
 		
-		void addCube(glm::ivec3 position, Texture &text);
+		void addCube(glm::ivec3 position, const Texture &text);
 		void destroyCube(glm::ivec3 position);
 
 
