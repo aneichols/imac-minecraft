@@ -58,11 +58,23 @@ namespace glimac {
 		CubeAtom cubeAtom;
 		cubeAtom.position = glm::vec3(position);
 		cubeAtom.tex_id = text.getId();
-
 		destructibleCube.push_back(cubeAtom);
 	}
 
 	void Map::destroyCube(glm::ivec3 position){
+		int i = 0;
+		for(auto& cube : destructibleCube) {
+			i++;
+
+			if(	cube.position.x == position.x &&
+					cube.position.y == position.y &&
+					cube.position.z == position.z
+				){
+
+					destructibleCube.erase(destructibleCube.begin() + i);
+					return;
+				}
+    }
 	}
 	
 	void Map::display(

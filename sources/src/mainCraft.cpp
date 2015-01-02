@@ -130,7 +130,7 @@ void controlGame(   SDLWindowManager &windowManager,
         map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), skyTexture);
     }
 
-    if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
+    if(windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)){
         map.destroyCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()));
     }
 }
