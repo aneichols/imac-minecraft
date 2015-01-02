@@ -11,7 +11,8 @@
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
 #include <glimac/TextureManager.hpp>
-
+#include <glimac/Sphere.hpp>
+#include <glimac/Skybox.hpp>
 
 #include "Physics.hpp"
 #include "Sound.hpp"
@@ -22,7 +23,8 @@
 using namespace glimac;
 
 const GLuint VERTEX_ATTR_POSITION = 0;
-//const GLuint VERTEX_ATTR_NORMAL = 1;
+const GLuint VERTEX_ATTR_NORMAL = 1;
+const GLuint VERTEX_ATTR_TEXCOORDS = 2;
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const int FPS = 30;
@@ -33,7 +35,7 @@ bool isSoundEnabled = true;
 struct CubeProgramm {
     Program m_Program;
 
-    GLint uMVPMatrix, uMVMatrix, uNormalMatrix,uTexture, uKd, uKs, uLightDir_vs, uShininess, uLightIntensity, uCameraPos;
+    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uTextureCube, uTextureSky, uKd, uKs, uLightDir_vs, uShininess, uLightIntensity, uCameraPos;
 
     CubeProgramm(const FilePath& applicationPath):
         m_Program(loadProgram(applicationPath.dirPath() + "shaders/cube.vs.glsl",
@@ -42,7 +44,29 @@ struct CubeProgramm {
         uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
         uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
-        uTexture = glGetUniformLocation(m_Program.getGLId(), "uTexture");
+        uTextureCube = glGetUniformLocation(m_Program.getGLId(), "uTextureCube");
+        //uTextureSky = glGetUniformLocation(m_Program.getGLId(), "uTextureSky");
+        uKd = glGetUniformLocation(m_Program.getGLId(), "uKd");
+        uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
+        uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
+        uLightDir_vs = glGetUniformLocation(m_Program.getGLId(), "uLightDir_vs");
+        uLightIntensity = glGetUniformLocation(m_Program.getGLId(), "uLightIntensity");
+        uCameraPos = glGetUniformLocation(m_Program.getGLId(), "uCameraPos");
+    }
+};
+
+struct SkyProgramm {
+    Program m_Program;
+
+    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uTextureSky, uKd, uKs, uLightDir_vs, uShininess, uLightIntensity, uCameraPos;
+
+    SkyProgramm(const FilePath& applicationPath):
+        m_Program(loadProgram(applicationPath.dirPath() + "shaders/sky.vs.glsl",
+                              applicationPath.dirPath() + "shaders/sky.fs.glsl")) {
+        uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
+        uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
+        uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
+        uTextureSky = glGetUniformLocation(m_Program.getGLId(), "uTextureSky");
         uKd = glGetUniformLocation(m_Program.getGLId(), "uKd");
         uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
         uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
@@ -128,6 +152,13 @@ int main(int argc, char** argv) {
 	Pokecraft::Timer timer(FPS);
 
 
+    /*********************************
+    * VBO, VAO
+    *********************************/
+    GLuint vbo, vao;
+    glGenBuffers (1, &vbo);
+    glGenVertexArrays(1, &vao);
+
 
     /*********************************
     * Objects we need
@@ -137,9 +168,29 @@ int main(int argc, char** argv) {
     Player player(glm::vec3 (0,2,0));
     Map map;
 
+    Sphere skySphere(50.f, 32, 16);
+    Texture skyTexture = Texture::load("assets/textures/sky.jpg");
+    Skybox skybox(glm::vec3(0.f,0.f,0.f), skySphere, skyTexture);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        skybox.load();
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(vao);
+        glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+        glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
+        glEnableVertexAttribArray(VERTEX_ATTR_TEXCOORDS);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid*) offsetof(ShapeVertex, position));
+            glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid*) offsetof(ShapeVertex, normal));
+            glVertexAttribPointer(VERTEX_ATTR_TEXCOORDS, 2, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid*) offsetof(ShapeVertex, texCoords));
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+
     std::vector<Cube> cubes;
     TextureManager textureManager;
-    textureManager.insert(std::pair<std::string, Texture>("assets/textures/brick.png",Texture::load("assets/textures/brick.png")));
+    textureManager.insert(std::pair<std::string, Texture>("assets/textures/brick.png", Texture::load("assets/textures/brick.png")));
 
     for(int i = 0; i < nb_cubes; i++){
         if(i%2) cubes.push_back (Cube(1, Texture::load("assets/textures/brick.png")));
@@ -156,7 +207,7 @@ int main(int argc, char** argv) {
 
     glEnable(GL_DEPTH_TEST);
     CubeProgramm cubeProgramm(applicationPath);
-    glEnable(GL_DEPTH_TEST);
+    SkyProgramm skyProgramm(applicationPath);
      // Dark blue background
     glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
     glDepthFunc(GL_LESS);
@@ -269,7 +320,7 @@ int main(int argc, char** argv) {
         glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 0));
         glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
 
-        //map or some very beautiful landscape 
+        //map or some very beautiful landscape
         for(int i = 0; i < nb_cubes; i++){
             cubes.at(i).display(projMatrix, 
                                 player.camera, 
@@ -277,7 +328,7 @@ int main(int argc, char** argv) {
                                 cubeProgramm.uMVMatrix, 
                                 cubeProgramm.uNormalMatrix, 
                                 cubeProgramm.uMVPMatrix, 
-                                cubeProgramm.uTexture
+                                cubeProgramm.uTextureCube
                                 );
         }
         map.display(projMatrix, 
@@ -286,19 +337,39 @@ int main(int argc, char** argv) {
                     cubeProgramm.uMVMatrix, 
                     cubeProgramm.uNormalMatrix, 
                     cubeProgramm.uMVPMatrix, 
-                    cubeProgramm.uTexture,
+                    cubeProgramm.uTextureCube,
                     textureManager
                     );
         //glBindVertexArray(0);
+
+        
+        glUseProgram(0);
+        skyProgramm.m_Program.use();
+
+         glBindVertexArray(vao);
+        //Very beautiful sky
+        skybox.setPosition(player.camera.getPosition());
+        skybox.display( projMatrix,
+                        player.camera.getViewMatrix() * MVMatrix,
+                        SDL_GetTicks(), 
+                        skyProgramm.uMVMatrix, 
+                        skyProgramm.uNormalMatrix, 
+                        skyProgramm.uMVPMatrix,
+                        skyProgramm.uTextureSky);
+        glUseProgram(0);
+        glBindVertexArray(0);
+
         windowManager.swapBuffers();
 
 		timer.sleepUntilNextTick();
     }
 
     //FIX ME !
-    soundPlayer.clean();
-    //glDeleteBuffers(1, &vbo);
-    //glDeleteVertexArrays(1, &vao);
+    //soundPlayer.clean();
+
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
     textureManager.deleteTexture();
+
     return EXIT_SUCCESS;
 }

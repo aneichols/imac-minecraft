@@ -62,4 +62,5 @@ namespace glimac {
 	void Player::display(){
 		std::cout << "displaying player OH YEAH" << std::endl;
 	}
+
 }

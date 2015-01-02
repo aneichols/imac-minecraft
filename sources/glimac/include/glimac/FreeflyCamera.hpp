@@ -23,6 +23,7 @@ namespace glimac {
     void rotateLeft(float degrees);
     void rotateUp(float degrees);
     void setPosition(glm::vec3 position);
+    glm::vec3 getPosition();
 
     glm::mat4 getViewMatrix() const;
 

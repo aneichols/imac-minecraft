@@ -20,6 +20,7 @@ namespace Pokecraft {
 		                   "assets/sounds/jump.wav",
 		                   "assets/sounds/jump.wav",
 		   };
+		   void clean();
 
 		public:
       Sound() {
@@ -27,8 +28,9 @@ namespace Pokecraft {
       }
 			void play(Sounds s);
 			int  loadSounds();
-			void clean();
+			
 			void setEnable(bool isEnabled);
 			bool getEnable() const;
+			~Sound();
 	};
 }

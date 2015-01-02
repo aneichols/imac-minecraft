@@ -63,4 +63,8 @@ namespace Pokecraft {
 		//Quit SDL_mixer
 		 Mix_CloseAudio();
 	}
+
+	Sound::~Sound() {
+		this->clean();
+	}
 }

@@ -14,11 +14,11 @@ uniform vec3 uCameraPos;
 
 out vec3 fFragColor;
 
-uniform sampler2D uTexture;
-
+uniform sampler2D uTextureCube;
+//uniform sampler2D uTextureSky;
 
 vec3 blinnPhong(){
-	vec3 rgbText = texture(uTexture, tc).rgb ;
+	vec3 rgbText = texture(uTextureCube, tc).rgb ;
 
 	vec3 w0 = normalize(uCameraPos-vPosition_vs);
 	vec3 wi = normalize(uLightDir_vs);

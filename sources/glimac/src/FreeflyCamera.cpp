@@ -54,6 +54,10 @@ namespace glimac {
     m_Position = position;
   }
 
+  glm::vec3 FreeflyCamera::getPosition(){
+    return m_Position;
+  }
+
   void FreeflyCamera::rotateLeft(float degrees) {
     float radians = degrees_to_radians(degrees);
     m_fPhi += radians;
