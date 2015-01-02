@@ -28,6 +28,7 @@ const GLuint VERTEX_ATTR_TEXCOORDS = 2;
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const int FPS = 30;
+const float radius = 2.0;
 const int nb_cubes = 5;
 bool isMenuEnabled = true;
 bool isSoundEnabled = true;
@@ -91,7 +92,15 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
 	// TODO always keep the mouse inside the window
 }
 
-void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mousePosition, Pokecraft::Sound &soundPlayer){
+void controlGame(   SDLWindowManager &windowManager,
+                    Player &player,
+                    glm::ivec2 &mousePosition,
+                    Pokecraft::Sound &soundPlayer,
+                    Map &map,
+                    TextureManager &textureManager,
+                    int &currentText
+                    ){
+    
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
     player.rotateUp(-offset.y);
@@ -120,6 +129,18 @@ void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mo
     if(windowManager.isKeyPressed(SDLK_SPACE)){
        soundPlayer.play(Pokecraft::JUMP);
        player.jump(move);
+    }
+
+    if(windowManager.isMouseButtonPressed(SDL_BUTTON_WHEELUP) || windowManager.isMouseButtonPressed(SDL_BUTTON_WHEELDOWN)){
+        std::cout << "molette" << std::endl;
+    }
+
+    if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
+       map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), textureManager.get("assets/textures/head1.png"));
+    }
+
+    if(windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)){
+        map.destroyCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()));
     }
 }
 
@@ -190,7 +211,6 @@ int main(int argc, char** argv) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-
     /*********************************
     * SHADERS
     *********************************/
@@ -208,6 +228,7 @@ int main(int argc, char** argv) {
     /*********************************
     * TEXTURES
     *********************************/
+    int currentText = 0;
 
     /*********************************
     * UNIFORM VAR
@@ -282,7 +303,7 @@ int main(int argc, char** argv) {
             controlMenu(windowManager, mousePosition);
         }
         else{
-        	controlGame(windowManager, player, mousePosition, soundPlayer);
+        	controlGame(windowManager, player, mousePosition, soundPlayer, map, textureManager ,currentText);
         }
 
         /*********************************

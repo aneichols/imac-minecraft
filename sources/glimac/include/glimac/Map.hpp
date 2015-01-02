@@ -30,6 +30,10 @@ namespace glimac {
 			buildMap(textureManager);
 		}
 		
+		void addCube(glm::ivec3 position, const Texture &text);
+		void destroyCube(glm::ivec3 position);
+
+
 		void display(
             glm::mat4 ProjMatrix,
             Player& player,
