@@ -1,57 +1,93 @@
 #include "glimac/Map.hpp"
+#include <cmath>
 
 namespace glimac {
+
+	static bool areColorComponentsEqual(int component1, int component2, int threshold = 10) {
+		return abs(component2 - component1) < threshold;
+	}
+
+	static bool areColorsEqual(cv::Vec3b color1, cv::Vec3b color2, int threshold = 100) {
+		return
+			areColorComponentsEqual(color1[0], color2[0], threshold) &&
+			areColorComponentsEqual(color1[1], color2[1], threshold) &&
+			areColorComponentsEqual(color1[2], color2[2], threshold);
+	}
+
+	void Map::buildLevel(std::string path, TextureManager& textureManager, unsigned int levelNumber) {
+		cv::Mat level = cv::imread(path, 1);
+
+		for(int x=0; x < level.rows; ++x) {
+		 	for(int y=0; y < level.cols; ++y) {
+		 		int posY = y - level.cols/2;
+		 		int posX = x - level.rows/2;
+
+				CubeAtom cubeAtom;
+				cubeAtom.position = glm::vec3(posX, levelNumber, posY);
+				cubeAtom.moveThrough = false;
+
+				cv::Vec3b colorRed(254, 0, 0),
+					colorGreen(0, 254, 0),
+					colorBlue(0, 0, 254);
+
+				cv::Vec3b color = level.at<cv::Vec3b>(x, y);
+
+				switch(levelNumber) {
+
+				case 0:
+					if(areColorsEqual(color, colorRed)) {
+						const Texture& texture = textureManager.get("assets/textures/sand.jpg");
+						cubeAtom.tex_id = texture.getId();
+
+						undestructibleCube.push_back(cubeAtom);
+					} else { // if(areColorsEqual(color, colorBlue)) {
+						const Texture& texture = textureManager.get("assets/textures/water.png");
+						cubeAtom.tex_id = texture.getId();
+						cubeAtom.moveThrough = true;
+
+						undestructibleCube.push_back(cubeAtom);
+					}
+					break;
+
+				case 1:
+					if(areColorsEqual(color, colorRed)) {
+						const Texture& texture = textureManager.get("assets/textures/sand.jpg");
+						cubeAtom.tex_id = texture.getId();
+
+						destructibleCube.push_back(cubeAtom);
+					}
+					break;
+
+				case 2:
+					if(areColorsEqual(color, colorRed)) {
+						const Texture& texture = textureManager.get("assets/textures/herbe.jpg");
+						cubeAtom.tex_id = texture.getId();
+
+						destructibleCube.push_back(cubeAtom);
+					}
+					break;
+
+				default:
+					if(areColorsEqual(color, colorRed)) {
+						const Texture& texture = textureManager.get("assets/textures/rock.png");
+						cubeAtom.tex_id = texture.getId();
+
+						destructibleCube.push_back(cubeAtom);
+					}
+					break;
+				}
+			}
+		}
+	}
+
 	void Map::buildMap(TextureManager& textureManager) {
 		destructibleCube.clear();
 		undestructibleCube.clear();
 
-		cv::Mat sea_ground;
-		sea_ground = cv::imread("assets/Map/sea_ground.jpg", 1 );
-
-    	// cv::Mat ground1;
-    	// ground1 = cv::imread("../maps/ground1.jpg", 1 );
-
-    	// cv::Mat ground2;
-    	// ground2 = cv::imread("../maps/ground2.jpg", 1 );
-
-    	// cv::Mat ground3;
-    	// ground3 = cv::imread("../maps/ground3.jpg", 1 );
-
-
-  //   	for(int x=0; x< sea_ground.rows; ++x) {
-		// 	for(int y=0; y<sea_ground.cols; ++y) {
-		// 		int posY = x - sea_ground.rows/2;
-		// 		int posX = y - sea_ground.cols/2;
-				
-		// 		if ((int)sea_ground.at<cv::Vec3b>(x,y)[0] < (int)sea_ground.at<cv::Vec3b>(x,y)[2]) {		
-		// 			undestructibleCube.push_back(glm::vec3(posX, 0, posY));
-		// 		}
-		// 		else{
-		// 			undestructibleCube.push_back(glm::vec3(posX, 0, posY));
-		// 		}
-		// 	}
-		// }
-
-		for(int x=0; x< 20; ++x) {
-			for(int y=0; y<20; ++y) {
-				int posY = x - 20/2;
-				int posX = y - 20/2;
-
-				const Texture& texture = textureManager.get("assets/textures/brick.png");
-
-				CubeAtom cubeAtom;
-				cubeAtom.position = glm::vec3(posX, 0, posY);
-				cubeAtom.tex_id = texture.getId();
-				
-				if ((int)sea_ground.at<cv::Vec3b>(x,y)[0] < (int)sea_ground.at<cv::Vec3b>(x,y)[2]) {
-					undestructibleCube.push_back(cubeAtom);
-				}
-				else{
-					undestructibleCube.push_back(cubeAtom);
-				}
-			}
-		}
-
+		buildLevel("assets/Map/sea_ground.jpg", textureManager, 0);
+		buildLevel("assets/Map/ground1.jpg", textureManager, 3);
+		buildLevel("assets/Map/ground2.jpg", textureManager, 2);
+		buildLevel("assets/Map/ground3.jpg", textureManager, 1);
 	}
 
 	void Map::display(
@@ -64,20 +100,49 @@ namespace glimac {
         GLint uTexture,
         TextureManager textureManager
     ) {
-    	float boundingCircleRadius = 20.0f;
+    	float boundingCircleRadius = 30.0f;
     	float squareBoundingCircleRadius = boundingCircleRadius*boundingCircleRadius;
 
     	glm::vec3 playerPosition = player.getPosition();
 
+    	// only display the cubes located within a radius of 20
         for(auto& cube : undestructibleCube) {
         	float xDiff = cube.position[0] - playerPosition[0];
         	float yDiff = cube.position[2] - playerPosition[2];
 
         	float squareDistanceToCube = xDiff*xDiff + yDiff*yDiff;
         	if(squareDistanceToCube < squareBoundingCircleRadius) {
-        		Cube tmp(1, textureManager.get("assets/textures/brick.png"));
-        		tmp.setPosition(cube.position);
-        		tmp.display(ProjMatrix, player.getCamera(), MVMatrix, uMVMatrix, uNormalMatrix, uMVPMatrix, uTexture);
+        		Cube::display(
+        			cube.position,
+        			cube.tex_id,
+        			ProjMatrix,
+        			player.getCamera(),
+        			MVMatrix,
+        			uMVMatrix,
+        			uNormalMatrix,
+        			uMVPMatrix,
+        			uTexture
+        		);
+        	}
+        }
+
+        for(auto& cube : destructibleCube) {
+        	float xDiff = cube.position[0] - playerPosition[0];
+        	float yDiff = cube.position[2] - playerPosition[2];
+
+        	float squareDistanceToCube = xDiff*xDiff + yDiff*yDiff;
+        	if(squareDistanceToCube < squareBoundingCircleRadius) {
+        		Cube::display(
+        			cube.position,
+        			cube.tex_id,
+        			ProjMatrix,
+        			player.getCamera(),
+        			MVMatrix,
+        			uMVMatrix,
+        			uNormalMatrix,
+        			uMVPMatrix,
+        			uTexture
+        		);
         	}
         }
 	}

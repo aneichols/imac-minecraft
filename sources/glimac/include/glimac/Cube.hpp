@@ -13,20 +13,11 @@ namespace glimac {
 
     class Cube {
 
-    private:
-        GLfloat size = 1;
-        glm::vec3 position = glm::vec3(1, 1, 1);
-        Texture texture;
-
-        // Alloue et construit les données (implantation dans le .cpp)
-        void build(GLfloat size, Texture texture);
-
      public:
-         Cube(GLfloat size, Texture texture);
-         void setPosition(glm::vec3 position);
-         glm::vec3 getPosition();
-         Texture getTexture();
-         void display(
+
+        static void display(
+            glm::vec3 position,
+            GLuint tex_id,
             glm::mat4 ProjMatrix,
             FreeflyCamera camera,
             glm::mat4 MVMatrix,

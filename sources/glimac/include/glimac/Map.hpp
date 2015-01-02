@@ -16,11 +16,13 @@ namespace glimac {
 		struct CubeAtom {
 			glm::vec3 position;
 			GLuint tex_id;
+			bool moveThrough;
 		};
 
 		std::vector<CubeAtom> destructibleCube;
 		std::vector<CubeAtom> undestructibleCube;
 
+		void buildLevel(std::string path, TextureManager& textureManager, unsigned int levelNumber);
 		void buildMap(TextureManager& textureManager);
 
 	public:

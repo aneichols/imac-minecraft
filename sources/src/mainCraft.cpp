@@ -98,26 +98,28 @@ void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mo
     player.rotateLeft(-offset.x);
     mousePosition = mousePosition_actual;
     player.updateAlt(0.1);
+
+    float move = 1;
     
     if(windowManager.isKeyPressed(SDLK_z)){
-       player.moveFront(0.1);
+       player.moveFront(move);
     }
 
     if(windowManager.isKeyPressed(SDLK_s)){
-       player.moveFront(-0.1);
+       player.moveFront(-move);
     }
 
     if(windowManager.isKeyPressed(SDLK_q)){
-       player.moveLeft(0.1);
+       player.moveLeft(move);
     }
 
     if(windowManager.isKeyPressed(SDLK_d)){
-       player.moveLeft(-0.1);
+       player.moveLeft(-move);
     }
 
     if(windowManager.isKeyPressed(SDLK_SPACE)){
        soundPlayer.play(Pokecraft::JUMP);
-       player.jump(0.1f);
+       player.jump(move);
     }
 }
 
@@ -165,7 +167,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,2,0));
+    Player player(glm::vec3 (0,5,0));
     TextureManager textureManager;
     Map map(textureManager);
 
@@ -188,18 +190,6 @@ int main(int argc, char** argv) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-
-    std::vector<Cube> cubes;
-    textureManager.insert(std::pair<std::string, Texture>("assets/textures/brick.png", Texture::load("assets/textures/brick.png")));
-
-    for(int i = 0; i < nb_cubes; i++){
-        if(i%2) cubes.push_back (Cube(1, Texture::load("assets/textures/brick.png")));
-        else cubes.push_back (Cube(1, Texture::load("assets/textures/head3.png")));
-    }
-
-    for(int i = 0; i < nb_cubes; i++){
-        cubes.at(i).setPosition(glm::vec3(1, i, 1));
-    }
 
     /*********************************
     * SHADERS
@@ -321,16 +311,6 @@ int main(int argc, char** argv) {
         glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
 
         //map or some very beautiful landscape
-        for(int i = 0; i < nb_cubes; i++){
-            cubes.at(i).display(projMatrix, 
-                                player.camera, 
-                                MVMatrix, 
-                                cubeProgramm.uMVMatrix, 
-                                cubeProgramm.uNormalMatrix, 
-                                cubeProgramm.uMVPMatrix, 
-                                cubeProgramm.uTextureCube
-                                );
-        }
         map.display(projMatrix, 
                     player, 
                     MVMatrix, 
