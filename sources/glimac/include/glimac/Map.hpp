@@ -28,6 +28,8 @@ namespace glimac {
 			buildMap(textureManager);
 		}
 		
+		void addCube(glm::ivec3 position, Texture &text);
+
 		void display(
             glm::mat4 ProjMatrix,
             Player& player,

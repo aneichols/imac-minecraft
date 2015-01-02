@@ -28,6 +28,7 @@ const GLuint VERTEX_ATTR_TEXCOORDS = 2;
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const int FPS = 30;
+const float radius = 2.0;
 const int nb_cubes = 5;
 bool isMenuEnabled = true;
 bool isSoundEnabled = true;
@@ -91,7 +92,12 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
 	// TODO always keep the mouse inside the window
 }
 
-void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mousePosition, Pokecraft::Sound &soundPlayer){
+void controlGame(   SDLWindowManager &windowManager,
+                    Player &player,
+                    glm::ivec2 &mousePosition,
+                    Pokecraft::Sound &soundPlayer,
+                    Map &map){
+
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
     player.rotateUp(-offset.y);
@@ -118,6 +124,14 @@ void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mo
     if(windowManager.isKeyPressed(SDLK_SPACE)){
        soundPlayer.play(Pokecraft::JUMP);
        player.jump(0.1f);
+    }
+
+    if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
+        map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()));
+    }
+
+    if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
+        map.destroyCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()));
     }
 }
 
@@ -292,7 +306,7 @@ int main(int argc, char** argv) {
             controlMenu(windowManager, mousePosition);
         }
         else{
-        	controlGame(windowManager, player, mousePosition, soundPlayer);
+        	controlGame(windowManager, player, mousePosition, soundPlayer, map);
         }
 
         /*********************************
@@ -321,7 +335,7 @@ int main(int argc, char** argv) {
         glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
 
         //map or some very beautiful landscape
-        for(int i = 0; i < nb_cubes; i++){
+       /* for(int i = 0; i < nb_cubes; i++){
             cubes.at(i).display(projMatrix, 
                                 player.camera, 
                                 MVMatrix, 
@@ -330,7 +344,9 @@ int main(int argc, char** argv) {
                                 cubeProgramm.uMVPMatrix, 
                                 cubeProgramm.uTextureCube
                                 );
-        }
+        }*/
+
+
         map.display(projMatrix, 
                     player, 
                     MVMatrix, 

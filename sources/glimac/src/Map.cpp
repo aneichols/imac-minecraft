@@ -54,6 +54,10 @@ namespace glimac {
 
 	}
 
+	void Map::addCube(glm::ivec3 position, Texture &text){
+			destructibleCube.push_back(glm::vec3(position));
+	}
+
 	void Map::display(
         glm::mat4 ProjMatrix,
         Player& player,
@@ -79,6 +83,12 @@ namespace glimac {
         		tmp.setPosition(cube.position);
         		tmp.display(ProjMatrix, player.getCamera(), MVMatrix, uMVMatrix, uNormalMatrix, uMVPMatrix, uTexture);
         	}
+        }
+
+       for(auto& x : destructibleCube) {
+        	Cube tmp(1, textureManager.get("assets/textures/sand.jpg"));
+        	tmp.setPosition(x);
+        	tmp.display(ProjMatrix, camera, MVMatrix, uMVMatrix, uNormalMatrix, uMVPMatrix, uTexture);
         }
 	}
 }
