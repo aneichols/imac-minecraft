@@ -22,6 +22,8 @@ namespace glimac {
 			buildMap();
 		}
 		
+		void addCube(glm::ivec3 position, Texture &text);
+
 		void display(
             glm::mat4 ProjMatrix,
             FreeflyCamera camera,
