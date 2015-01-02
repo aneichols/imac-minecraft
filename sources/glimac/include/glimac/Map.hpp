@@ -29,6 +29,8 @@ namespace glimac {
 		}
 		
 		void addCube(glm::ivec3 position, Texture &text);
+		void destroyCube(glm::ivec3 position);
+
 
 		void display(
             glm::mat4 ProjMatrix,

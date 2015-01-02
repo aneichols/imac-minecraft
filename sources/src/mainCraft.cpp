@@ -97,7 +97,7 @@ void controlGame(   SDLWindowManager &windowManager,
                     glm::ivec2 &mousePosition,
                     Pokecraft::Sound &soundPlayer,
                     Map &map){
-
+    Texture skyTexture = Texture::load("assets/textures/sky.jpg");
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
     player.rotateUp(-offset.y);
@@ -127,7 +127,7 @@ void controlGame(   SDLWindowManager &windowManager,
     }
 
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
-        map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()));
+        map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), skyTexture);
     }
 
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
