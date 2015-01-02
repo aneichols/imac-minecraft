@@ -3,6 +3,7 @@
 #include "FreeflyCamera.hpp"
 #include "common.hpp"
 #include "Cube.hpp"
+#include "Player.hpp"
 #include <glimac/glm.hpp>
 #include <glimac/TextureManager.hpp>
 
@@ -11,20 +12,25 @@
 namespace glimac {
 
 	class Map{
-		private:
-		std::vector<glm::vec3> destructibleCube;
-		std::vector<glm::vec3> undestructibleCube;
+	private:
+		struct CubeAtom {
+			glm::vec3 position;
+			GLuint tex_id;
+		};
 
-		void buildMap();
+		std::vector<CubeAtom> destructibleCube;
+		std::vector<CubeAtom> undestructibleCube;
+
+		void buildMap(TextureManager& textureManager);
 
 	public:
-		Map() {
-			buildMap();
+		Map(TextureManager& textureManager) {
+			buildMap(textureManager);
 		}
 		
 		void display(
             glm::mat4 ProjMatrix,
-            FreeflyCamera camera,
+            Player& player,
             glm::mat4 MVMatrix,
             GLint uMVMatrix,
             GLint uNormalMatrix,

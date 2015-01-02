@@ -1,7 +1,7 @@
 #include "glimac/Map.hpp"
 
 namespace glimac {
-	void Map::buildMap() {
+	void Map::buildMap(TextureManager& textureManager) {
 		destructibleCube.clear();
 		undestructibleCube.clear();
 
@@ -36,12 +36,18 @@ namespace glimac {
 			for(int y=0; y<20; ++y) {
 				int posY = x - 20/2;
 				int posX = y - 20/2;
+
+				const Texture& texture = textureManager.get("assets/textures/brick.png");
+
+				CubeAtom cubeAtom;
+				cubeAtom.position = glm::vec3(posX, 0, posY);
+				cubeAtom.tex_id = texture.getId();
 				
-				if ((int)sea_ground.at<cv::Vec3b>(x,y)[0] < (int)sea_ground.at<cv::Vec3b>(x,y)[2]) {		
-					undestructibleCube.push_back(glm::vec3(posX, 0, posY));
+				if ((int)sea_ground.at<cv::Vec3b>(x,y)[0] < (int)sea_ground.at<cv::Vec3b>(x,y)[2]) {
+					undestructibleCube.push_back(cubeAtom);
 				}
 				else{
-					undestructibleCube.push_back(glm::vec3(posX, 0, posY));
+					undestructibleCube.push_back(cubeAtom);
 				}
 			}
 		}
@@ -50,7 +56,7 @@ namespace glimac {
 
 	void Map::display(
         glm::mat4 ProjMatrix,
-        FreeflyCamera camera,
+        Player& player,
         glm::mat4 MVMatrix,
         GLint uMVMatrix,
         GLint uNormalMatrix,
@@ -58,10 +64,21 @@ namespace glimac {
         GLint uTexture,
         TextureManager textureManager
     ) {
-        for(auto& x : undestructibleCube) {
-        	Cube tmp(1, textureManager.get("assets/textures/brick.png"));
-        	tmp.setPosition(x);
-        	tmp.display(ProjMatrix, camera, MVMatrix, uMVMatrix, uNormalMatrix, uMVPMatrix, uTexture);
+    	float boundingCircleRadius = 20.0f;
+    	float squareBoundingCircleRadius = boundingCircleRadius*boundingCircleRadius;
+
+    	glm::vec3 playerPosition = player.getPosition();
+
+        for(auto& cube : undestructibleCube) {
+        	float xDiff = cube.position[0] - playerPosition[0];
+        	float yDiff = cube.position[2] - playerPosition[2];
+
+        	float squareDistanceToCube = xDiff*xDiff + yDiff*yDiff;
+        	if(squareDistanceToCube < squareBoundingCircleRadius) {
+        		Cube tmp(1, textureManager.get("assets/textures/brick.png"));
+        		tmp.setPosition(cube.position);
+        		tmp.display(ProjMatrix, player.getCamera(), MVMatrix, uMVMatrix, uNormalMatrix, uMVPMatrix, uTexture);
+        	}
         }
 	}
 }

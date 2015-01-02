@@ -1,7 +1,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <glimac/glm.hpp>
-#include "Sound.hpp"
+#include "glimac/Sound.hpp"
 #include <SDL/SDL_mixer.h>
 
 namespace Pokecraft {
@@ -56,10 +56,18 @@ namespace Pokecraft {
 	void Sound::clean(){
 		 //Free the sound effects
 		for(int i = 0; i < nbSoundsEffects; i++){
+			if(!soundEffects[i]) {
+				continue;
+			}
+
 			Mix_FreeChunk(soundEffects[i]);
 		}
-		 //Free the music
-		 Mix_FreeMusic( backgroundMusic );
+
+		if(backgroundMusic) {
+			//Free the music
+			Mix_FreeMusic( backgroundMusic );
+		}
+		 
 		//Quit SDL_mixer
 		 Mix_CloseAudio();
 	}

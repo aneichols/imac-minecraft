@@ -14,10 +14,10 @@
 #include <glimac/Sphere.hpp>
 #include <glimac/Skybox.hpp>
 
-#include "Physics.hpp"
-#include "Sound.hpp"
-#include "Player.hpp"
-#include "Timer.hpp"
+#include "glimac/Physics.hpp"
+#include "glimac/Sound.hpp"
+#include "glimac/Player.hpp"
+#include "glimac/Timer.hpp"
 
 
 using namespace glimac;
@@ -166,7 +166,8 @@ int main(int argc, char** argv) {
 
     //FreeflyCamera camera;
     Player player(glm::vec3 (0,2,0));
-    Map map;
+    TextureManager textureManager;
+    Map map(textureManager);
 
     Sphere skySphere(50.f, 32, 16);
     Texture skyTexture = Texture::load("assets/textures/sky.jpg");
@@ -189,7 +190,6 @@ int main(int argc, char** argv) {
 
 
     std::vector<Cube> cubes;
-    TextureManager textureManager;
     textureManager.insert(std::pair<std::string, Texture>("assets/textures/brick.png", Texture::load("assets/textures/brick.png")));
 
     for(int i = 0; i < nb_cubes; i++){
@@ -332,7 +332,7 @@ int main(int argc, char** argv) {
                                 );
         }
         map.display(projMatrix, 
-                    player.camera, 
+                    player, 
                     MVMatrix, 
                     cubeProgramm.uMVMatrix, 
                     cubeProgramm.uNormalMatrix, 
@@ -364,8 +364,6 @@ int main(int argc, char** argv) {
 		timer.sleepUntilNextTick();
     }
 
-    //FIX ME !
-    //soundPlayer.clean();
 
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);

@@ -2,7 +2,7 @@
 #include <math.h> 
 #include <GL/glew.h>
 #include <glimac/glm.hpp>
-#include "Player.hpp"
+#include "glimac/Player.hpp"
 #include <glimac/FreeflyCamera.hpp>
 
 //TODO camera
@@ -36,6 +36,14 @@ namespace glimac {
 				state = unMoving;
 			}
 		}
+	}
+
+	const FreeflyCamera& Player::getCamera() const {
+		return camera;
+	}
+
+	glm::vec3 Player::getPosition() {
+		return camera.getPosition();
 	}
 
 	void Player::moveFront(float t){
