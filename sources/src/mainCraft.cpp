@@ -35,7 +35,11 @@ bool isSoundEnabled = true;
 struct CubeProgramm {
     Program m_Program;
 
-    GLint uMVPMatrix, uMVMatrix, uNormalMatrix, uTextureCube, uTextureSky, uKd, uKs, uLightDir_vs, uShininess, uLightIntensity, uCameraPos;
+    GLint uMVPMatrix, uMVMatrix, uNormalMatrix,
+        uTextureCube, uTextureSky,
+        uKd, uKs, uLightDir_vs, uShininess, uLightIntensity,
+        uPunctLightPos, uNumberOfPunctLights,
+        uCameraPos;
 
     CubeProgramm(const FilePath& applicationPath):
         m_Program(loadProgram(applicationPath.dirPath() + "shaders/cube.vs.glsl",
@@ -45,12 +49,13 @@ struct CubeProgramm {
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
         uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
         uTextureCube = glGetUniformLocation(m_Program.getGLId(), "uTextureCube");
-        //uTextureSky = glGetUniformLocation(m_Program.getGLId(), "uTextureSky");
         uKd = glGetUniformLocation(m_Program.getGLId(), "uKd");
         uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
         uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
         uLightDir_vs = glGetUniformLocation(m_Program.getGLId(), "uLightDir_vs");
         uLightIntensity = glGetUniformLocation(m_Program.getGLId(), "uLightIntensity");
+        uPunctLightPos = glGetUniformLocation(m_Program.getGLId(), "uPunctLightPos");
+        uNumberOfPunctLights = glGetUniformLocation(m_Program.getGLId(), "uNumberOfPunctLights");
         uCameraPos = glGetUniformLocation(m_Program.getGLId(), "uCameraPos");
     }
 };
@@ -214,18 +219,15 @@ int main(int argc, char** argv) {
     // Accept fragment if it closer to the camera than the former one
 
 
-
-    /*********************************
-    * TEXTURES
-    *********************************/
-
     /*********************************
     * UNIFORM VAR
     *********************************/
+    float punctLights[] = {
+        1.0, 1.0, 1.0,
+        1.0, 2.0, 0.0
+    };
 
-    /*********************************
-    * CAMERA INITIALIZATION
-    *********************************/
+    GLint numberOfPunctLights = 2;
 
     /*********************************
     * MATERIAU
@@ -236,7 +238,7 @@ int main(int argc, char** argv) {
 
     Kd = glm::vec3(1.f, 1.f, 1.f); // replace by texture ! oh yeah
     Ks = glm::vec3(1.f, 1.f, 1.f);
-    shininess = 1.f;
+    shininess = 10.f;
 
     glm::mat4 MVMatrix;
     glm::mat4 NormalMatrix;
@@ -251,6 +253,13 @@ int main(int argc, char** argv) {
     /*********************************
      * INITIALIZATION CODE
      *********************************/
+    for(int i = 0; i < numberOfPunctLights; i++) {
+       glm::vec3 newPos(punctLights[i], punctLights[i+1], punctLights[i+2]);
+       glm::vec3 posViewspace = glm::vec3(MVMatrix * glm::vec4(newPos, 0));
+       punctLights[i] = posViewspace[0];
+       punctLights[i+1] = posViewspace[1];
+       punctLights[i+2] = posViewspace[2];
+    }
    
 
     /*mouse position : default is windows center */
@@ -319,6 +328,9 @@ int main(int argc, char** argv) {
         glm::vec3 position_worldspace(1, 1, 1);
         glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 0));
         glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
+
+        glUniform1i(cubeProgramm.uNumberOfPunctLights, numberOfPunctLights);
+        glUniform1fv(cubeProgramm.uPunctLightPos, numberOfPunctLights*3, punctLights);
 
         //map or some very beautiful landscape
         for(int i = 0; i < nb_cubes; i++){
