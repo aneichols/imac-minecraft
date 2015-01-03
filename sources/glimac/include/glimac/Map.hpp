@@ -42,7 +42,7 @@ namespace glimac {
             GLint uNormalMatrix,
             GLint uMVPMatrix,
             GLint uTexture,
-            TextureManager textureManager
+            TextureManager& textureManager
         );
 	};
 

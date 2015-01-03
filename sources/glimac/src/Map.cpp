@@ -75,9 +75,9 @@ namespace glimac {
 		undestructibleCube.clear();
 
 		buildLevel("assets/Map/sea_ground.jpg", textureManager, 0);
-		buildLevel("assets/Map/ground1.jpg", textureManager, 3);
+		buildLevel("assets/Map/ground1.jpg", textureManager, 1);
 		buildLevel("assets/Map/ground2.jpg", textureManager, 2);
-		buildLevel("assets/Map/ground3.jpg", textureManager, 1);
+		buildLevel("assets/Map/ground3.jpg", textureManager, 3);
 	}
 
 	void Map::addCube(glm::ivec3 position, const Texture &text){
@@ -111,7 +111,7 @@ namespace glimac {
         GLint uNormalMatrix,
         GLint uMVPMatrix,
         GLint uTexture,
-        TextureManager textureManager
+        TextureManager& textureManager
     ) {
     	float boundingCircleRadius = 50.0f;
     	float squareBoundingCircleRadius = boundingCircleRadius*boundingCircleRadius;
