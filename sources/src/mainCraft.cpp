@@ -102,12 +102,14 @@ void controlGame(   SDLWindowManager &windowManager,
                     int &currentText
                     ){
     
+    glm::vec3 oldPosition = player.getPosition();
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
     player.rotateUp(-offset.y);
     player.rotateLeft(-offset.x);
     mousePosition = mousePosition_actual;
     player.updateAlt(0.1);
+    player.gravity();
 
     float move = 1;
     
@@ -143,6 +145,8 @@ void controlGame(   SDLWindowManager &windowManager,
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)){
         map.destroyCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()));
     }
+
+    map.collidePlayer(player, player.getPosition() - oldPosition);
 }
 
 /****************************************************************************************
@@ -189,7 +193,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,9,0));
+    Player player(glm::vec3 (0,5,0));
     TextureManager textureManager;
     Map map(textureManager);
 

@@ -87,7 +87,7 @@ namespace glimac {
 		destructibleCube.push_back(cubeAtom);
 	}
 
-	void Map::destroyCube(glm::ivec3 position){
+	void Map::destroyCube(glm::ivec3 position) {
 		int i = 0;
 		for(auto& cube : destructibleCube) {
 			i++;
@@ -100,7 +100,66 @@ namespace glimac {
 					destructibleCube.erase(destructibleCube.begin() + i);
 					return;
 				}
-    }
+   		 }
+	}
+
+	void Map::collidePlayerWithCube(Player& player, CubeAtom& cube, glm::vec3 deltaMove) {
+		glm::vec3 playerPosition = player.getPosition();
+
+		float minX = playerPosition[0] - player.getWidth()/2.f;
+		float minY = playerPosition[2] - player.getWidth()/2.f;
+		float minZ = playerPosition[1] - 1;
+		float maxX = minX + player.getWidth();
+		float maxY = minY + player.getWidth();
+		float maxZ = minZ + player.getHeight();
+
+		int cMinX = cube.position[0] - 0.5f;
+		int cMinY = cube.position[2] - 0.5f;
+		int cMinZ = cube.position[1] - 0.5f;
+		int cMaxX = cMinX + 1;
+		int cMaxY = cMinY + 1;
+		int cMaxZ = cMinZ + 1;
+
+		if(minZ <= cMaxZ) {
+			if(
+				maxX > cMinX &&
+				minX < cMaxX &&
+				maxY > cMinY &&
+				minY < cMaxY
+			) {
+				playerPosition[1] = cMaxZ + 1;
+				player.setPosition(playerPosition);
+			}
+		}
+
+		/*if(
+			maxX > cMinX &&
+			minX < cMaxX &&
+			maxY > cMinY &&
+			minY < cMaxY &&
+			maxZ > cMinZ &&
+			minZ < cMaxZ
+		) {
+			player.setPosition(playerPosition - deltaMove);
+		}
+	/*	return(tBox1.m_vecMax.x > tBox2.m_vecMin.x &&
+    tBox1.m_vecMin.x < tBox2.m_vecMax.x &&
+    tBox1.m_vecMax.y > tBox2.m_vecMin.y &&
+    tBox1.m_vecMin.y < tBox2.m_vecMax.y &&
+    tBox1.m_vecMax.z > tBox2.m_vecMin.z &&
+    tBox1.m_vecMin.z < tBox2.m_vecMax.z);
+    */
+	}
+
+	void Map::collidePlayerWithCubes(Player& player, std::vector<CubeAtom>& cubes, glm::vec3 deltaMove) {
+		for(auto& cube : cubes) {
+			collidePlayerWithCube(player, cube, deltaMove);
+   		 }
+	}
+
+	void Map::collidePlayer(Player& player, glm::vec3 deltaMove) {
+		collidePlayerWithCubes(player, destructibleCube, deltaMove);
+		collidePlayerWithCubes(player, undestructibleCube, deltaMove);
 	}
 	
 	void Map::display(
