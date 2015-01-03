@@ -1,8 +1,14 @@
 #include <glimac/Image.hpp>
+#include <glimac/SDLWindowManager.hpp>
+#include <GL/glew.h>
 #include <fstream>
+#include <iostream>
+#include <glimac/Program.hpp>
+#include <glimac/FilePath.hpp>
 #include "Sound.hpp"
 #include "Menu.hpp"
 
+using namespace glimac;
 
 namespace Pokecraft {
 
@@ -48,7 +54,38 @@ namespace Pokecraft {
 		soundPlayer.play(BACKGROUND);
 	}
 
-	void Menu::displayMenu(){}
+	void Menu::displayMenu(){
+
+		switch (menu.getState()){
+			case 0 : //SETTINGS
+			//affiche settingTexture
+			break;
+
+			case 1 : //CHOOSEPLAYER
+			// affiche choosePlayerTexture
+			break;
+
+			case 2 : //ROOT
+			//affiche rootTexture
+			break; 
+
+
+		// glGenBuffers (1, &vbo);
+	 	// glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+		// Vertex2DColor vertices1[] = { 
+		//     Vertex2DColor(glm::vec2(-1, 1), glm::vec3(1,0,0)), // premier sommet
+		//     Vertex2DColor(glm::vec2(-1, -1), glm::vec3(0,1,0)), // deuxième sommet
+		//     Vertex2DColor(glm::vec2(1, 1), glm::vec3(0,0,1)), // troisième sommet
+
+		//     Vertex2DColor(glm::vec2(1, 1), glm::vec3(1,0,0)), // premier sommet
+		//     Vertex2DColor(glm::vec2(1, -1), glm::vec3(0,1,0)), // deuxième sommet
+		//     Vertex2DColor(glm::vec2(-1, -1), glm::vec3(0,0,1)) // troisième sommet
+		// };
+
+		// glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(Vertex2DColor), vertices1, GL_STATIC_DRAW);
+		// glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 
 	void Menu::loadMap(std::string path){}
 }

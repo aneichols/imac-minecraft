@@ -6,6 +6,8 @@
 #include <string>
 #include "Sound.hpp"
 
+using namespace glimac;
+
 namespace Pokecraft {
 
 	enum State {SETTINGS, CHOOSEPLAYER, ROOT, GAME}; //  0 1 2
@@ -32,6 +34,8 @@ namespace Pokecraft {
 }
 
 #endif
+
+
 /*
 class Menu
 {
