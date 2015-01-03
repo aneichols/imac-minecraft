@@ -3,16 +3,6 @@
 
 namespace glimac {
 
-	static bool areColorComponentsEqual(int component1, int component2, int threshold = 10) {
-		return abs(component2 - component1) < threshold;
-	}
-
-	static bool areColorsEqual(cv::Vec3b color1, cv::Vec3b color2, int threshold = 100) {
-		return
-			areColorComponentsEqual(color1[0], color2[0], threshold) &&
-			areColorComponentsEqual(color1[1], color2[1], threshold) &&
-			areColorComponentsEqual(color1[2], color2[2], threshold);
-	}
 
 	void Map::buildLevel(std::string path, TextureManager& textureManager, unsigned int levelNumber) {
 		cv::Mat level = cv::imread(path, 1);
@@ -23,7 +13,7 @@ namespace glimac {
 		 		int posX = x - level.rows/2;
 
 				CubeAtom cubeAtom;
-				cubeAtom.position = glm::vec3(posX, levelNumber, posY);
+				cubeAtom.position = glm::vec3( posY, levelNumber, posX);
 				cubeAtom.moveThrough = false;
 
 				cv::Vec3b colorRed(254, 0, 0),
@@ -35,13 +25,13 @@ namespace glimac {
 				switch(levelNumber) {
 
 				case 0:
-					if(areColorsEqual(color, colorRed)) {
-						const Texture& texture = textureManager.get("assets/textures/sand.jpg");
+					if ((int)level.at<cv::Vec3b>(x,y)[0] > (int)level.at<cv::Vec3b>(x,y)[2]) {
+						const Texture& texture = textureManager.get("assets/textures/water.png");
 						cubeAtom.tex_id = texture.getId();
 
 						undestructibleCube.push_back(cubeAtom);
-					} else { // if(areColorsEqual(color, colorBlue)) {
-						const Texture& texture = textureManager.get("assets/textures/water.png");
+					} else { 
+						const Texture& texture = textureManager.get("assets/textures/sand.jpg");
 						cubeAtom.tex_id = texture.getId();
 						cubeAtom.moveThrough = true;
 
@@ -50,7 +40,7 @@ namespace glimac {
 					break;
 
 				case 1:
-					if(areColorsEqual(color, colorRed)) {
+					if ((int)level.at<cv::Vec3b>(x,y)[0] < (int)level.at<cv::Vec3b>(x,y)[2]) {
 						const Texture& texture = textureManager.get("assets/textures/sand.jpg");
 						cubeAtom.tex_id = texture.getId();
 
@@ -59,7 +49,7 @@ namespace glimac {
 					break;
 
 				case 2:
-					if(areColorsEqual(color, colorRed)) {
+					if ((int)level.at<cv::Vec3b>(x,y)[0] < (int)level.at<cv::Vec3b>(x,y)[2]) {
 						const Texture& texture = textureManager.get("assets/textures/herbe.jpg");
 						cubeAtom.tex_id = texture.getId();
 
@@ -68,7 +58,7 @@ namespace glimac {
 					break;
 
 				default:
-					if(areColorsEqual(color, colorRed)) {
+					if ((int)level.at<cv::Vec3b>(x,y)[0] < (int)level.at<cv::Vec3b>(x,y)[2]) {
 						const Texture& texture = textureManager.get("assets/textures/rock.png");
 						cubeAtom.tex_id = texture.getId();
 
@@ -123,7 +113,7 @@ namespace glimac {
         GLint uTexture,
         TextureManager textureManager
     ) {
-    	float boundingCircleRadius = 30.0f;
+    	float boundingCircleRadius = 50.0f;
     	float squareBoundingCircleRadius = boundingCircleRadius*boundingCircleRadius;
 
     	glm::vec3 playerPosition = player.getPosition();

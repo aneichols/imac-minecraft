@@ -18,6 +18,7 @@
 #include "glimac/Sound.hpp"
 #include "glimac/Player.hpp"
 #include "glimac/Timer.hpp"
+#include "glimac/Interface.hpp"
 
 
 using namespace glimac;
@@ -188,7 +189,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,5,0));
+    Player player(glm::vec3 (0,9,0));
     TextureManager textureManager;
     Map map(textureManager);
 
@@ -216,6 +217,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
     CubeProgramm cubeProgramm(applicationPath);
     SkyProgramm skyProgramm(applicationPath);
      // Dark blue background
@@ -359,6 +361,24 @@ int main(int argc, char** argv) {
                         skyProgramm.uTextureSky);
         glUseProgram(0);
         glBindVertexArray(0);
+
+    /*********************************
+    * Mini Map
+    *********************************/
+    glLoadIdentity();
+    glOrtho(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
+
+    DrawImage(WINDOW_WIDTH - 100 - 20 - 7.5 + (player.getPosition().x / 4),
+            63 - 7.5 + (player.getPosition().z / 4),
+            15,
+            15,
+            "assets/textures/head4.png");
+
+
+    DrawImage(WINDOW_WIDTH - 200 - 20, 20, 200, 96, "assets/textures/hoenn.png");
+    
+   
+
 
         windowManager.swapBuffers();
 
