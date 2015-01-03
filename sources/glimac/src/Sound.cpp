@@ -8,6 +8,9 @@ namespace Pokecraft {
 
 	int Sound::build() {
 
+		for(int i = 0; i < nbSoundsEffects; i++)
+			soundEffects[i] = NULL;
+
     if(Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) {
         std::cout << "SOUND ERROR" << std::endl;
         return -1;
@@ -43,24 +46,25 @@ namespace Pokecraft {
     	return 0;
     }
 
+    int errorCode = 0;
 		for(int i = 0; i < nbSoundsEffects; i++){
 			soundEffects[i] = Mix_LoadWAV(soundEffects_path[i].c_str());
 			if( soundEffects[i] == NULL ) {
 	    	std::cout << soundEffects_path[i] << "not found" << std::endl;
-	    	return -1;
+	    	errorCode = -1;
     	}
 		}
-		return 0;
+		return errorCode;
 	}
 
 	void Sound::clean(){
+
+		 Mix_HaltMusic();
 		 //Free the sound effects
 		for(int i = 0; i < nbSoundsEffects; i++){
-			if(!soundEffects[i]) {
-				continue;
+			if(soundEffects[i]) {
+				Mix_FreeChunk(soundEffects[i]);
 			}
-
-			Mix_FreeChunk(soundEffects[i]);
 		}
 
 		if(backgroundMusic) {

@@ -6,13 +6,11 @@
 #include "glimac/Sound.hpp"
 #include <glimac/FreeflyCamera.hpp>
 
-//TODO camera
-
 namespace glimac {
 
-	void Player::build(glm::vec3 position, Pokecraft::Sound &soundPlayer) {
+	void Player::build(glm::vec3 position) {
+
 		this->position = position;
-		this->soundPlayer = soundPlayer;
 		this->camera.setPosition(position);
 		std::cout << "player builded" << std::endl;
 		alt = 0.f;
@@ -77,9 +75,4 @@ namespace glimac {
 		soundPlayer.play(Pokecraft::JUMP);
 		state = Jumping;
 	}
-
-	void Player::display(){
-		std::cout << "displaying player OH YEAH" << std::endl;
-	}
-
 }

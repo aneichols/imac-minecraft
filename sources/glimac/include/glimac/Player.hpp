@@ -7,11 +7,11 @@ namespace glimac {
 	enum State {Jumping, Falling, Walking, unMoving}; //  0 1 2
 
 	class Player {
-		void build(glm::vec3 position, Pokecraft::Sound &soundPlayer);
+		void build(glm::vec3 position);
 
 	public:
-      Player(glm::vec3 position, Pokecraft::Sound &soundPlayer) {
-          build(position, soundPlayer);
+      Player(glm::vec3 position) {
+          build(position);
       }
 
       State state = unMoving;

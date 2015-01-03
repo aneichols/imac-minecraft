@@ -16,7 +16,6 @@
 #include <glimac/Skybox.hpp>
 
 #include "glimac/Physics.hpp"
-#include "glimac/Sound.hpp"
 #include "glimac/Player.hpp"
 #include "glimac/Timer.hpp"
 #include "glimac/Interface.hpp"
@@ -170,8 +169,6 @@ int main(int argc, char** argv) {
     /*********************************
     * SOUNDS
     *********************************/
-    Pokecraft::Sound soundPlayer;
-
 
     /*********************************
     * TIMER
@@ -192,7 +189,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,9,0), soundPlayer);
+    Player player(glm::vec3 (0,9,0));
     TextureManager textureManager;
     Map map(textureManager);
 
@@ -270,11 +267,6 @@ int main(int argc, char** argv) {
 
     /*mouse position : default is windows center */
     glm::ivec2 mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-
-
-    //testing sounds
-    //soundPlayer.play(Pokecraft::BACKGROUND);
-
 
     // Application loop:
     bool done = false;
