@@ -97,7 +97,7 @@ namespace glimac {
 		destructibleCube.push_back(cubeAtom);
 	}
 
-	void Map::destroyCube(glm::ivec3 position){
+	bool Map::destroyCube(glm::ivec3 position){
 		int i = 0;
 		for(auto& cube : destructibleCube) {
 			i++;
@@ -108,9 +108,10 @@ namespace glimac {
 				){
 
 					destructibleCube.erase(destructibleCube.begin() + i);
-					return;
+					return true;
 				}
-    }
+    	}
+    	return false;
 	}
 	
 	void Map::display(

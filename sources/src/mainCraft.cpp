@@ -31,7 +31,6 @@ const int FPS = 30;
 const float radius = 2.0;
 const int nb_cubes = 5;
 bool isMenuEnabled = true;
-bool isSoundEnabled = true;
 
 struct CubeProgramm {
     Program m_Program;
@@ -95,7 +94,6 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition){
 void controlGame(   SDLWindowManager &windowManager,
                     Player &player,
                     glm::ivec2 &mousePosition,
-                    Pokecraft::Sound &soundPlayer,
                     Map &map,
                     TextureManager &textureManager,
                     int &currentText
@@ -127,7 +125,6 @@ void controlGame(   SDLWindowManager &windowManager,
     }
 
     if(windowManager.isKeyPressed(SDLK_SPACE)){
-       soundPlayer.play(Pokecraft::JUMP);
        player.jump(move);
     }
 
@@ -136,11 +133,14 @@ void controlGame(   SDLWindowManager &windowManager,
     }
 
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
-       map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), textureManager.get("assets/textures/head1.png"));
+        map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), textureManager.get("assets/textures/head1.png"));
+        player.buildCube();
+
     }
 
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)){
-        map.destroyCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()));
+        if(map.destroyCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()))) player.destroyCube();
+
     }
 }
 
@@ -188,7 +188,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,5,0));
+    Player player(glm::vec3 (0,5,0), soundPlayer);
     TextureManager textureManager;
     Map map(textureManager);
 
@@ -303,7 +303,7 @@ int main(int argc, char** argv) {
             controlMenu(windowManager, mousePosition);
         }
         else{
-        	controlGame(windowManager, player, mousePosition, soundPlayer, map, textureManager ,currentText);
+        	controlGame(windowManager, player, mousePosition, map, textureManager ,currentText);
         }
 
         /*********************************
