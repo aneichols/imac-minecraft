@@ -248,7 +248,7 @@ int main(int argc, char** argv) {
     float shininess;
 
     Kd = glm::vec3(1.f, 1.f, 1.f); // replace by texture ! oh yeah
-    Ks = glm::vec3(1.f, 1.f, 1.f);
+    Ks = glm::vec3(0.f, 0.f, 0.f);
     shininess = 1.f;
 
     glm::mat4 MVMatrix;
