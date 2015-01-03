@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <GL/glew.h>
 #include <glimac/SDLWindowManager.hpp>
 #include <glimac/Image.hpp>
@@ -32,6 +33,7 @@ const int FPS = 30;
 const float radius = 2.0;
 const int nb_cubes = 5;
 bool isMenuEnabled = true;
+std::string currentTextPath = "assets/textures/brick.png";
 
 struct CubeProgramm {
     Program m_Program;
@@ -97,7 +99,8 @@ void controlGame(   SDLWindowManager &windowManager,
                     glm::ivec2 &mousePosition,
                     Map &map,
                     TextureManager &textureManager,
-                    int &currentText
+                    int &currentTexture,
+                    std:: string texturesPaths[]
                     ){
     
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
@@ -129,12 +132,12 @@ void controlGame(   SDLWindowManager &windowManager,
        player.jump(move);
     }
 
-    if(windowManager.isMouseButtonPressed(SDL_BUTTON_WHEELUP) || windowManager.isMouseButtonPressed(SDL_BUTTON_WHEELDOWN)){
-        std::cout << "molette" << std::endl;
+    if(windowManager.isKeyPressed(SDLK_UP) || windowManager.isKeyPressed(SDLK_DOWN)){
+       currentTexture = (++ currentTexture) % 4;
     }
 
     if(windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)){
-        map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), textureManager.get("assets/textures/head2.png"));
+        map.addCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()), textureManager.get(texturesPaths[currentTexture]));
         player.buildCube();
 
     }
@@ -230,15 +233,14 @@ int main(int argc, char** argv) {
     /*********************************
     * TEXTURES
     *********************************/
-    int currentText = 0;
+    int currentTexture = 0;
 
-    /*********************************
-    * UNIFORM VAR
-    *********************************/
-
-    /*********************************
-    * CAMERA INITIALIZATION
-    *********************************/
+    std::string texturesPaths[] = {
+        "assets/textures/brick.png",
+        "assets/textures/herbe.jpg",
+        "assets/textures/rock.png",
+        "assets/textures/sand.jpg"
+    };
 
     /*********************************
     * MATERIAU
@@ -305,7 +307,7 @@ int main(int argc, char** argv) {
             controlMenu(windowManager, mousePosition);
         }
         else{
-        	controlGame(windowManager, player, mousePosition, map, textureManager ,currentText);
+        	controlGame(windowManager, player, mousePosition, map, textureManager , currentTexture, texturesPaths);
         }
 
         /*********************************
@@ -377,8 +379,16 @@ int main(int argc, char** argv) {
 
     DrawImage(WINDOW_WIDTH - 200 - 20, 20, 200, 96, "assets/textures/hoenn.png");
     
-   
 
+    /*********************************
+    * Current Texture
+    *********************************/
+    
+    glLoadIdentity();
+    glOrtho(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
+    //DrawImage(WINDOW_WIDTH - 200 - 20, 20, 200, 96, "assets/textures/hoenn.png");
+
+    DrawImage(WINDOW_WIDTH - 300, 50, 50, 50, texturesPaths[currentTexture].c_str());
 
         windowManager.swapBuffers();
 
