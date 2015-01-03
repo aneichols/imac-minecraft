@@ -8,6 +8,7 @@
 #include <glimac/common.hpp>
 #include <glimac/glm.hpp>
 #include <glimac/FreeflyCamera.hpp>
+#include <cstddef>
 
 #include "Physics.hpp"
 #include "Sound.hpp"
@@ -31,7 +32,7 @@ struct CubeProgramm {
 
     CubeProgramm(const FilePath& applicationPath):
         m_Program(loadProgram(applicationPath.dirPath() + "shaders/3D.vs.glsl",
-							  applicationPath.dirPath() + "shaders/nothing.gs.glsl",
+                              applicationPath.dirPath() + "shaders/nothing.gs.glsl",
                               applicationPath.dirPath() + "shaders/allShaders.fs.glsl")) {
         uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
         uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
@@ -44,6 +45,17 @@ struct CubeProgramm {
     }
 };
 
+
+class Vertex2DColor {
+    public:
+        Vertex2DColor() {
+        }
+        Vertex2DColor(glm::vec2 pos, glm::vec3 col):position(pos),color(col){
+        }
+        glm::vec2 position;
+        glm::vec3 color;
+};
+
 /****************************************************************************************
 * Should these functions be in separated file ? menuControler and gameControler ?
  ****************************************************************************************/
@@ -51,6 +63,8 @@ struct CubeProgramm {
 void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition, Pokecraft::Menu &menu){
     switch (menu.getState()){
         case 0 : //SETTINGS
+            //menu.setState(Pokecraft::SETTINGS); //rajouter "SETTINGS"(?)
+
             if(windowManager.isKeyPressed(SDLK_y)){
                 menu.setSound(true);
             }
@@ -99,10 +113,14 @@ void controlMenu(SDLWindowManager &windowManager, glm::ivec2 &mousePosition, Pok
     }
 
     /* reset mouse position if user choose to launch the game */
-    //SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-    //mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    // SDL_WarpMouse(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    // mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-	// TODO always keep the mouse inside the window
+    // TODO always keep the mouse inside the window
+}
+
+void displayGame(){
+    //rendering code game
 }
 
 void controlGame(SDLWindowManager &windowManager, Player &player, glm::ivec2 &mousePosition, Pokecraft::Sound &soundPlayer){
@@ -169,7 +187,7 @@ int main(int argc, char** argv) {
     /*********************************
     * TIMER
     *********************************/
-	Pokecraft::Timer timer(FPS);
+    Pokecraft::Timer timer(FPS);
 
 
 
@@ -188,9 +206,9 @@ int main(int argc, char** argv) {
     glEnable(GL_DEPTH_TEST);
     CubeProgramm cubeProgramm(applicationPath);
     glEnable(GL_DEPTH_TEST);
-     // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-    glDepthFunc(GL_LESS);
+    // Dark blue background
+    // glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+    // glDepthFunc(GL_LESS);
     // Accept fragment if it closer to the camera than the former one
 
 
@@ -236,20 +254,6 @@ int main(int argc, char** argv) {
     glGenBuffers (1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, cube.getVertexCount() * sizeof(ShapeVertex),cube.getDataPointer(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-    glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid *) offsetof(ShapeVertex, position));
-    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(ShapeVertex), (const GLvoid *) offsetof(ShapeVertex, normal));
-
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
 
     /*mouse position : default is windows center */
     glm::ivec2 mousePosition = glm::vec2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -294,6 +298,10 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindVertexArray(vao);
 
+        glClearColor(0.0f, 0.0f, 0.8f, 0.0f);
+        //menu.displayMenu();
+
+
         projMatrix = glm::perspective(glm::radians(70.f), WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 100.f);
         MVMatrix = player.camera.getViewMatrix();
 
@@ -320,10 +328,11 @@ int main(int argc, char** argv) {
             glUniformMatrix4fv(cubeProgramm.uNormalMatrix, 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(cubeMVMatrix))));
             glDrawArrays(GL_TRIANGLES, 0, cube.getVertexCount());
         }
+
         glBindVertexArray(0);
         windowManager.swapBuffers();
 
-		timer.sleepUntilNextTick();
+        timer.sleepUntilNextTick();
     }
 
     //FIX ME !
