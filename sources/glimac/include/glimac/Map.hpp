@@ -31,7 +31,7 @@ namespace glimac {
 		}
 		
 		void addCube(glm::ivec3 position, const Texture &text);
-		void destroyCube(glm::ivec3 position);
+		bool destroyCube(glm::ivec3 position);
 
 
 		void display(

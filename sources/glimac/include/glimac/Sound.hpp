@@ -4,7 +4,7 @@
 
 namespace Pokecraft {
 
-	enum Sounds {JUMP, WALK, CRASH, BACKGROUND}; //  0 1 2
+	enum Sounds {JUMP, DESTROY, BUILD, BACKGROUND}; //  0 1 2 3
 	class Sound {
 
 		int build();
@@ -17,8 +17,8 @@ namespace Pokecraft {
 
 		  std::string soundEffects_path[3] = {
 		                   "assets/sounds/jump.wav",
-		                   "assets/sounds/jump.wav",
-		                   "assets/sounds/jump.wav",
+		                   "assets/sounds/destroy_2.wav",
+		                   "assets/sounds/build.wav",
 		   };
 		   void clean();
 

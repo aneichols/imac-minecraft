@@ -3,14 +3,16 @@
 #include <GL/glew.h>
 #include <glimac/glm.hpp>
 #include "glimac/Player.hpp"
+#include "glimac/Sound.hpp"
 #include <glimac/FreeflyCamera.hpp>
 
 //TODO camera
 
 namespace glimac {
 
-	void Player::build(glm::vec3 position) {
+	void Player::build(glm::vec3 position, Pokecraft::Sound &soundPlayer) {
 		this->position = position;
+		this->soundPlayer = soundPlayer;
 		this->camera.setPosition(position);
 		std::cout << "player builded" << std::endl;
 		alt = 0.f;
@@ -58,12 +60,21 @@ namespace glimac {
 		camera.rotateUp(t);
 	}
 
+	void Player::buildCube(){
+		soundPlayer.play(Pokecraft::BUILD);
+	}
+
+	void Player::destroyCube(){
+		soundPlayer.play(Pokecraft::DESTROY);
+	}
+
 	void Player::rotateLeft(float degrees){
 		camera.rotateLeft(degrees);
 	}
 
 	void Player::jump(float t){
 		if (state == Jumping || state == Falling) return;
+		soundPlayer.play(Pokecraft::JUMP);
 		state = Jumping;
 	}
 
