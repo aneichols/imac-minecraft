@@ -19,8 +19,18 @@ namespace glimac {
 
 		destructibleCube.push_back(cubeAtom);
 
+				cubeAtom.position =position + glm::vec3( 0, 3, 0);
+		cubeAtom.tex_id = texture1.getId();
+
+		destructibleCube.push_back(cubeAtom);
+
+				cubeAtom.position =position + glm::vec3( 0, 2, 0);
+		cubeAtom.tex_id = texture1.getId();
+
+		destructibleCube.push_back(cubeAtom);
+
 		//leaves
-			for( int i= 6 ; i<= 7; i++){
+			for( int i= 5 ; i<= 7; i++){
 				/*1*/cubeAtom.position = position +glm::vec3( 0, i, 0);
 				cubeAtom.tex_id = texture2.getId();
 
