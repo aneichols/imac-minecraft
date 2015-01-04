@@ -13,8 +13,8 @@
 #include <glimac/FreeflyCamera.hpp>
 #include <glimac/TextureManager.hpp>
 #include <glimac/Sphere.hpp>
+#include <glimac/Tree.hpp>
 #include <glimac/Skybox.hpp>
-
 #include "glimac/Physics.hpp"
 #include "glimac/Player.hpp"
 #include "glimac/Timer.hpp"
@@ -189,9 +189,10 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,9,0));
+    Player player(glm::vec3 (0,7,0));
     TextureManager textureManager;
     Map map(textureManager);
+    //Tree tree(glm::ivec3(0,0,0), textureManager);   
 
     Sphere skySphere(50.f, 32, 16);
     Texture skyTexture = Texture::load("assets/textures/sky.jpg");
@@ -339,9 +340,24 @@ int main(int argc, char** argv) {
                     );
         //glBindVertexArray(0);
 
+    /*********************************
+    * Tree
+    *********************************/
+
+    /*tree.display(projMatrix, 
+                    player, 
+                    MVMatrix, 
+                    cubeProgramm.uMVMatrix, 
+                    cubeProgramm.uNormalMatrix, 
+                    cubeProgramm.uMVPMatrix, 
+                    cubeProgramm.uTextureCube,
+                    textureManager);*/
+
+
         
         glUseProgram(0);
         skyProgramm.m_Program.use();
+
 
          glBindVertexArray(vao);
         //Very beautiful sky
@@ -355,6 +371,8 @@ int main(int argc, char** argv) {
                         skyProgramm.uTextureSky);
         glUseProgram(0);
         glBindVertexArray(0);
+
+
 
     /*********************************
     * Mini Map

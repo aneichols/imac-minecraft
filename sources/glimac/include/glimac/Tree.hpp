@@ -5,30 +5,29 @@
 #include "common.hpp"
 #include "Cube.hpp"
 #include "Player.hpp"
-#include "Tree.hpp"
 #include <glimac/glm.hpp>
 #include <glimac/TextureManager.hpp>
 
 
-
-
 namespace glimac {
 
-	class Map{
+	class Tree{
 	private:
 
 		std::vector<CubeAtom> destructibleCube;
-		std::vector<CubeAtom> undestructibleCube;
+		glm::vec3 position;
 
-		void buildLevel(std::string path, TextureManager& textureManager, unsigned int levelNumber);
-		void buildMap(TextureManager& textureManager);
+		void buildTree(TextureManager& textureManager);
+		void buildTrees(std::string path, TextureManager& textureManager);
+		
 
 	public:
-		Map(TextureManager& textureManager) {
-			buildMap(textureManager);
+		std::vector<CubeAtom> getAllTreeCubes();
+		Tree(glm::vec3 position, TextureManager& textureManager) : position(position) {
+			buildTree(textureManager);
 		}
 		
-		void addCube(glm::ivec3 position, const Texture &text);
+		void addCube(glm::vec3 position, const Texture &text);
 		bool destroyCube(glm::ivec3 position);
 
 

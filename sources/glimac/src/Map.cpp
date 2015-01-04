@@ -12,6 +12,7 @@ namespace glimac {
 		 		int posY = y - level.cols/2;
 		 		int posX = x - level.rows/2;
 
+		 		
 				CubeAtom cubeAtom;
 				cubeAtom.position = glm::vec3( posY, levelNumber, posX);
 				cubeAtom.moveThrough = false;
@@ -25,12 +26,26 @@ namespace glimac {
 				switch(levelNumber) {
 
 				case 0:
-					if ((int)level.at<cv::Vec3b>(x,y)[0] > (int)level.at<cv::Vec3b>(x,y)[2]) {
+					if ((int)level.at<cv::Vec3b>(x,y)[0] > (int)level.at<cv::Vec3b>(x,y)[2] &&
+						(int)level.at<cv::Vec3b>(x,y)[0] > (int)level.at<cv::Vec3b>(x,y)[1]) {
 						const Texture& texture = textureManager.get("assets/textures/water.png");
 						cubeAtom.tex_id = texture.getId();
 
 						undestructibleCube.push_back(cubeAtom);
-					} else { 
+
+					}
+					if ((int)level.at<cv::Vec3b>(x,y)[1] > (int)level.at<cv::Vec3b>(x,y)[2] &&
+						(int)level.at<cv::Vec3b>(x,y)[1] > (int)level.at<cv::Vec3b>(x,y)[0]) {
+						Tree tree(glm::vec3( posY, levelNumber  , posX), textureManager);
+						std::vector<CubeAtom> cubes = tree.getAllTreeCubes();
+						for(auto& cubeAtom : cubes){
+							destructibleCube.push_back(cubeAtom);
+						}
+
+						
+					} 
+					if((int)level.at<cv::Vec3b>(x,y)[2] > (int)level.at<cv::Vec3b>(x,y)[0] &&
+						(int)level.at<cv::Vec3b>(x,y)[2] > (int)level.at<cv::Vec3b>(x,y)[1]) { 
 						const Texture& texture = textureManager.get("assets/textures/sand.jpg");
 						cubeAtom.tex_id = texture.getId();
 						cubeAtom.moveThrough = true;
