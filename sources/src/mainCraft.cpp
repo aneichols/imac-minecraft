@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,7,0));
+    Player player(glm::vec3 (0,6,0));
     TextureManager textureManager;
     Map map(textureManager);
     //Tree tree(glm::ivec3(0,0,0), textureManager);   

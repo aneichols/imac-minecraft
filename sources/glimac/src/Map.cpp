@@ -73,12 +73,23 @@ namespace glimac {
 					break;
 
 				default:
-					if ((int)level.at<cv::Vec3b>(x,y)[0] < (int)level.at<cv::Vec3b>(x,y)[2]) {
+					if((int)level.at<cv::Vec3b>(x,y)[2] > (int)level.at<cv::Vec3b>(x,y)[0] &&
+						(int)level.at<cv::Vec3b>(x,y)[2] > (int)level.at<cv::Vec3b>(x,y)[1]) {
 						const Texture& texture = textureManager.get("assets/textures/rock.png");
 						cubeAtom.tex_id = texture.getId();
 
 						destructibleCube.push_back(cubeAtom);
 					}
+					if ((int)level.at<cv::Vec3b>(x,y)[1] > (int)level.at<cv::Vec3b>(x,y)[2] &&
+						(int)level.at<cv::Vec3b>(x,y)[1] > (int)level.at<cv::Vec3b>(x,y)[0]) {
+						Tree tree(glm::vec3( posY, levelNumber  , posX), textureManager);
+						std::vector<CubeAtom> cubes = tree.getAllTreeCubes();
+						for(auto& cubeAtom : cubes){
+							destructibleCube.push_back(cubeAtom);
+						}
+
+						
+					} 
 					break;
 				}
 			}

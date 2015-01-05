@@ -9,25 +9,27 @@ namespace glimac {
 		const Texture& texture2 = textureManager.get("assets/textures/leaves.jpg");
 
 		//tronc
-		cubeAtom.position = position + glm::vec3( 0, 4, 0);
-		cubeAtom.tex_id = texture1.getId();
+		for( int i= 1 ; i<= 5; i++){
+			cubeAtom.position = position + glm::vec3( 0, i, 0);
+			cubeAtom.tex_id = texture1.getId();
 
-		destructibleCube.push_back(cubeAtom);
+			destructibleCube.push_back(cubeAtom);
 
-		cubeAtom.position =position + glm::vec3( 0, 5, 0);
-		cubeAtom.tex_id = texture1.getId();
+			cubeAtom.position =position + glm::vec3( 0, i, 0);
+			cubeAtom.tex_id = texture1.getId();
 
-		destructibleCube.push_back(cubeAtom);
+			destructibleCube.push_back(cubeAtom);
 
-				cubeAtom.position =position + glm::vec3( 0, 3, 0);
-		cubeAtom.tex_id = texture1.getId();
+			cubeAtom.position =position + glm::vec3( 0, i, 0);
+			cubeAtom.tex_id = texture1.getId();
 
-		destructibleCube.push_back(cubeAtom);
+			destructibleCube.push_back(cubeAtom);
 
-				cubeAtom.position =position + glm::vec3( 0, 2, 0);
-		cubeAtom.tex_id = texture1.getId();
+					cubeAtom.position =position + glm::vec3( 0, i, 0);
+			cubeAtom.tex_id = texture1.getId();
 
-		destructibleCube.push_back(cubeAtom);
+			destructibleCube.push_back(cubeAtom);
+		}
 
 		//leaves
 			for( int i= 5 ; i<= 7; i++){
