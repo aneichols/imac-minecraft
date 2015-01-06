@@ -12,7 +12,6 @@ namespace glimac {
 
 		this->position = position;
 		this->camera.setPosition(position);
-		std::cout << "player builded" << std::endl;
 		alt = 0.f;
 		threshold = 1.5f;
 	}
@@ -38,12 +37,25 @@ namespace glimac {
 		}
 	}
 
+	void Player::gravity(bool down) {
+		State tmp = state;
+		state = Falling;
+
+		updateAlt(down ? 1 : -1);
+
+		state = tmp;
+	}
+
 	const FreeflyCamera& Player::getCamera() const {
 		return camera;
 	}
 
 	glm::vec3 Player::getPosition() {
 		return camera.getPosition();
+	}
+
+	void Player::setPosition(glm::vec3 position) {
+		build(position);
 	}
 
 	void Player::moveFront(float t){
@@ -74,5 +86,13 @@ namespace glimac {
 		if (state == Jumping || state == Falling) return;
 		soundPlayer.play(Pokecraft::JUMP);
 		state = Jumping;
+	}
+
+	int Player::getWidth() const {
+		return width;
+	}
+
+	int Player::getHeight() const {
+		return height;
 	}
 }

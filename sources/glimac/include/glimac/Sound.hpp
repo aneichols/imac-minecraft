@@ -17,10 +17,8 @@ namespace Pokecraft {
 
 		  std::string soundEffects_path[3] = {
 		                   "assets/sounds/jump.wav",
-		                   "assets/sounds/jump.wav",
-		                   "assets/sounds/jump.wav",
-		                   /*"assets/sounds/destroy_2.wav",
-		                   "assets/sounds/build.wav",*/
+		                   "assets/sounds/destroy_2.wav",
+		                   "assets/sounds/build.wav",
 		   };
 		   void clean();
 
