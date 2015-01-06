@@ -167,10 +167,6 @@ int main(int argc, char** argv) {
     FilePath applicationPath(argv[0]);
 
     /*********************************
-    * SOUNDS
-    *********************************/
-
-    /*********************************
     * TIMER
     *********************************/
 	Pokecraft::Timer timer(FPS);
@@ -298,6 +294,8 @@ int main(int argc, char** argv) {
 
         if(isMenuEnabled){
             controlMenu(windowManager, mousePosition);
+            player.getSoundPlayer().play(Pokecraft::BACKGROUND);
+            isMenuEnabled = false;
         }
         else{
         	controlGame(windowManager, player, mousePosition, map, textureManager , currentTexture, texturesPaths);

@@ -29,6 +29,7 @@ namespace glimac {
 	  void destroyCube();
 	  void display();
 	  void updateAlt(float t);
+	  Pokecraft::Sound& getSoundPlayer(){  return soundPlayer;}
 
 	private:
 		glm::vec3 position;
