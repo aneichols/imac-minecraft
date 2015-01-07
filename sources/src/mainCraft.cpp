@@ -19,10 +19,7 @@
 #include "glimac/Player.hpp"
 #include "glimac/Timer.hpp"
 #include "glimac/Interface.hpp"
-<<<<<<< HEAD
-#include "../src/Menu.cpp"
-=======
->>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
+#include "glimac/Menu.hpp"
 
 
 using namespace glimac;
@@ -35,7 +32,6 @@ const int WINDOW_HEIGHT = 600;
 const int FPS = 30;
 const float radius = 2.0;
 const int nb_cubes = 5;
-bool isMenuEnabled = true;
 std::string currentTextPath = "assets/textures/brick.png";
 
 struct CubeProgramm {
@@ -86,10 +82,9 @@ struct SkyProgramm {
 * Should these functions be in separated file ? menuControler and gameControler ?
  ****************************************************************************************/
 
-void controlMenu(SDLWindowManager &windowManager, Pokecraft::Menu menu, glm::ivec2 &mousePosition){
+void controlMenu(SDLWindowManager &windowManager, Pokecraft::Menu &menu, glm::ivec2 &mousePosition){
     std::cout << "menu" << std::endl;
     menu.setState(Pokecraft::ROOT);
-    //isMenuEnabled = false;
 
     if(windowManager.isKeyPressed(SDLK_s)){
        menu.setState(Pokecraft::SETTINGS);
@@ -98,10 +93,8 @@ void controlMenu(SDLWindowManager &windowManager, Pokecraft::Menu menu, glm::ive
             menu.setState(Pokecraft::ROOT);
         }
         if(windowManager.isKeyPressed(SDLK_y)){
-            menu.setSound(1);
         }
         if(windowManager.isKeyPressed(SDLK_n)){
-            menu.setSound(0);
         }
     }
 
@@ -113,15 +106,15 @@ void controlMenu(SDLWindowManager &windowManager, Pokecraft::Menu menu, glm::ive
         }
         if(windowManager.isKeyPressed(SDLK_r)){
             menu.launchGame();
-            isMenuEnabled = false;
+            menu.setState(Pokecraft::GAME);
         }
         if(windowManager.isKeyPressed(SDLK_g)){
             menu.launchGame();
-            isMenuEnabled = false;
+             menu.setState(Pokecraft::GAME);
         }
         if(windowManager.isKeyPressed(SDLK_b)){
             menu.launchGame();
-            isMenuEnabled = false;
+             menu.setState(Pokecraft::GAME);
         }
     }
 
@@ -227,7 +220,7 @@ int main(int argc, char** argv) {
     Player player(glm::vec3 (0,6,0));
     TextureManager textureManager;
     Map map(textureManager);
-    //Tree tree(glm::ivec3(0,0,0), textureManager);   
+    Pokecraft::Menu menu; 
 
     Sphere skySphere(50.f, 32, 16);
     Texture skyTexture = Texture::load("assets/textures/sky.jpg");
@@ -319,40 +312,16 @@ int main(int argc, char** argv) {
             }
         }
 
-        /**************************************
-        *               EVENTS
-        *
-        *   ___ game states ____
-        *
-        *   1. menu enabled : display the menu
-        *   2. game enabled : dispay the game
-        *
-        *    use isMenuEnabled
-        *
-         **************************************/
-
-        if(isMenuEnabled){
-<<<<<<< HEAD
-            Pokecraft::Sound s_menu;
-            Pokecraft::Menu menu(s_menu);
-
-            glLoadIdentity();
-            glOrtho(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
-            menu.displayMenu();
-
-            controlMenu(windowManager, menu, mousePosition);
-        
-            //player.getSoundPlayer().play(Pokecraft::BACKGROUND);
-            //isMenuEnabled = false;
-=======
-            controlMenu(windowManager, mousePosition);
-            player.getSoundPlayer().play(Pokecraft::BACKGROUND);
-            isMenuEnabled = false;
->>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
+        if(menu.getState() == Pokecraft::GAME){
+            controlGame(windowManager, player, mousePosition, map, textureManager , currentTexture, texturesPaths);
         }
         else{
-        	controlGame(windowManager, player, mousePosition, map, textureManager , currentTexture, texturesPaths);
+            //glLoadIdentity();
+            //glOrtho(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
+            //menu.displayMenu();
+            //controlMenu(windowManager, menu, mousePosition);
         }
+
 
         /*********************************
          * RENDERING CODE
@@ -379,10 +348,6 @@ int main(int argc, char** argv) {
         glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 0));
         glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
         //map or some very beautiful landscape
         map.display(projMatrix, 
                     player, 
@@ -393,38 +358,7 @@ int main(int argc, char** argv) {
                     cubeProgramm.uTextureCube,
                     textureManager
                     );
-        //glBindVertexArray(0);
 
-<<<<<<< HEAD
-    // /*********************************
-    // * Tree
-    // *********************************/
-
-    // /*tree.display(projMatrix, 
-    //                 player, 
-    //                 MVMatrix, 
-    //                 cubeProgramm.uMVMatrix, 
-    //                 cubeProgramm.uNormalMatrix, 
-    //                 cubeProgramm.uMVPMatrix, 
-    //                 cubeProgramm.uTextureCube,
-    //                 textureManager);*/
-=======
-    /*********************************
-    * Tree
-    *********************************/
-
-    /*tree.display(projMatrix, 
-                    player, 
-                    MVMatrix, 
-                    cubeProgramm.uMVMatrix, 
-                    cubeProgramm.uNormalMatrix, 
-                    cubeProgramm.uMVPMatrix, 
-                    cubeProgramm.uTextureCube,
-                    textureManager);*/
->>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
-
-
-        
         glUseProgram(0);
         skyProgramm.m_Program.use();
 

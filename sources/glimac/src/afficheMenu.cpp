@@ -10,11 +10,11 @@
 #include <glimac/FreeflyCamera.hpp>
 #include <cstddef>
 
-#include "Physics.hpp"
-#include "Sound.hpp"
-#include "Player.hpp"
-#include "Timer.hpp"
-#include "Menu.hpp"
+#include <glimac/Physics.hpp>
+#include <glimac/Sound.hpp>
+#include <glimac/Player.hpp>
+#include <glimac/Timer.hpp>
+#include <glimac/Menu.hpp>
 
 using namespace glimac;
 

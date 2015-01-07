@@ -8,14 +8,13 @@
 #include <glimac/FilePath.hpp>
 #include <glimac/Sound.hpp>
 #include <glimac/Interface.hpp>
-#include "Menu.hpp"
+#include <glimac/Menu.hpp>
 
 using namespace glimac;
 
 namespace Pokecraft {
 
-	Menu::Menu(Sound &s){
-		this->soundPlayer = s;
+	Menu::Menu(){
 		std::cout << "menu builded" << std::endl;
 	}
 
@@ -74,9 +73,6 @@ namespace Pokecraft {
 
 	void Menu::launchGame(){
 		this->isEnabled = false;
-		soundPlayer.play(BACKGROUND);
 	}
-
-	void Menu::loadMap(std::string path){}
 }
 

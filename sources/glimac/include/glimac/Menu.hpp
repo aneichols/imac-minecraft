@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-#include <glimac/Sound.hpp>
+
 
 using namespace glimac;
 
@@ -19,7 +19,7 @@ namespace Pokecraft {
 			State state = ROOT;
 
 		public:
-			Menu(Sound &s);
+			Menu();
 			bool getEnabled();
 			State getState();
 			void setEnabled(bool enabled);
