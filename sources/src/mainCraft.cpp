@@ -101,13 +101,14 @@ void controlGame(   SDLWindowManager &windowManager,
                     int &currentTexture,
                     std:: string texturesPaths[]
                     ){
-    
+    glm::vec3 oldPosition = player.getPosition();
     glm::ivec2 mousePosition_actual = windowManager.getMousePosition();
     glm::ivec2 offset = windowManager.getMousePosition() - mousePosition;
     player.rotateUp(-offset.y);
     player.rotateLeft(-offset.x);
     mousePosition = mousePosition_actual;
     player.updateAlt(0.1);
+//player.gravity();
 
     float move = 1;
     
@@ -145,6 +146,7 @@ void controlGame(   SDLWindowManager &windowManager,
         if(map.destroyCube(glm::ivec3((player.camera.getFrontVector() * radius) + player.camera.getPosition()))) player.destroyCube();
 
     }
+    //map.collidePlayer(player, player.getPosition() - oldPosition);
 }
 
 /****************************************************************************************
@@ -185,7 +187,7 @@ int main(int argc, char** argv) {
     *********************************/
 
     //FreeflyCamera camera;
-    Player player(glm::vec3 (0,6,0));
+    Player player(glm::vec3 (0,6,-30));
     TextureManager textureManager;
     Map map(textureManager);
     //Tree tree(glm::ivec3(0,0,0), textureManager);   
@@ -337,20 +339,6 @@ int main(int argc, char** argv) {
                     textureManager
                     );
         //glBindVertexArray(0);
-
-    /*********************************
-    * Tree
-    *********************************/
-
-    /*tree.display(projMatrix, 
-                    player, 
-                    MVMatrix, 
-                    cubeProgramm.uMVMatrix, 
-                    cubeProgramm.uNormalMatrix, 
-                    cubeProgramm.uMVPMatrix, 
-                    cubeProgramm.uTextureCube,
-                    textureManager);*/
-
 
         
         glUseProgram(0);

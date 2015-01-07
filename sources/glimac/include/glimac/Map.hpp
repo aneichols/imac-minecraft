@@ -22,6 +22,9 @@ namespace glimac {
 
 		void buildLevel(std::string path, TextureManager& textureManager, unsigned int levelNumber);
 		void buildMap(TextureManager& textureManager);
+		void collidePlayerWithCubes(Player& player, std::vector<CubeAtom>& cubes, glm::vec3 deltaMove);
+void collidePlayerWithCube(Player& player, CubeAtom& cube, glm::vec3 deltaMove);
+
 
 	public:
 		Map(TextureManager& textureManager) {
@@ -31,7 +34,7 @@ namespace glimac {
 		void addCube(glm::ivec3 position, const Texture &text);
 		bool destroyCube(glm::ivec3 position);
 
-
+		void collidePlayer(Player& player, glm::vec3 deltaMove);
 		void display(
             glm::mat4 ProjMatrix,
             Player& player,

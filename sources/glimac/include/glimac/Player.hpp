@@ -19,6 +19,7 @@ namespace glimac {
 
 	  const FreeflyCamera& getCamera() const;
 	  glm::vec3 getPosition();
+	  void setPosition(glm::vec3 position);
 
 	  void moveFront(float t);
 	  void moveLeft(float t);
@@ -27,14 +28,17 @@ namespace glimac {
 	  void jump(float t);
 	  void buildCube();
 	  void destroyCube();
-	  void display();
 	  void updateAlt(float t);
 	  Pokecraft::Sound& getSoundPlayer(){  return soundPlayer;}
+	  void gravity(bool down = true);
+	  int getWidth() const;
+	  int getHeight() const;
 
 	private:
 		glm::vec3 position;
 		Pokecraft::Sound soundPlayer;
 		float threshold;
 		float alt;
+		int width = 1, height = 3;
 	};
 }

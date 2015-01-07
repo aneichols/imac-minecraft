@@ -12,26 +12,25 @@ namespace glimac {
 
 		this->position = position;
 		this->camera.setPosition(position);
-		std::cout << "player builded" << std::endl;
 		alt = 0.f;
-		threshold = 1.5f;
+		threshold = 1.f;
 	}
 
 	void Player::updateAlt(float t){
-		if(state != Jumping && state != Falling) return;
+	if(state != Jumping && state != Falling) return;
 
 		if(state == Jumping){
 			if(0 >= (threshold - alt)){
 				state = Falling;
 			}else{
 				alt += t;
-				camera.moveUp(0.1 * cos(t));
+				camera.moveUp(0.5 * cos(t));
 			}
 		}
 
 		if(state == Falling){
 			alt -= t;
-			camera.moveUp(0.1 * -cos(t));
+			camera.moveUp(0.5 * -cos(t));
 			if(alt <= 0){
 				state = unMoving;
 			}
@@ -44,6 +43,10 @@ namespace glimac {
 
 	glm::vec3 Player::getPosition() {
 		return camera.getPosition();
+	}
+
+	void Player::setPosition(glm::vec3 position) {
+		build(position);
 	}
 
 	void Player::moveFront(float t){
@@ -75,4 +78,19 @@ namespace glimac {
 		soundPlayer.play(Pokecraft::JUMP);
 		state = Jumping;
 	}
+
+	void Player::gravity(bool down) {
+		State tmp = state;
+		state = Falling;
+		//updateAlt(down ? 1 : -1);
+		state = tmp;
+	}
+
+		int Player::getWidth() const {
+return width;
+}
+int Player::getHeight() const {
+return height;
+}
+
 }
