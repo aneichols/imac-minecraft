@@ -1,10 +1,9 @@
-#ifndef MENU_H_INCLUDED
-#define MENU_H_INCLUDED
+#pragma once
 
 #include <iostream>
 #include <cstdlib>
 #include <string>
-#include "Sound.hpp"
+#include <glimac/Sound.hpp>
 
 using namespace glimac;
 
@@ -24,31 +23,11 @@ namespace Pokecraft {
 			bool getEnabled();
 			State getState();
 			void setEnabled(bool enabled);
-			void setSound(bool enabled);
-			void updateMenu();
-			void displayMenu();
-			void launchGame();
 			void setState(State s);
+			void setSound(bool enabled);
+			void displayMenu();
+			void updateMenu();
+			void launchGame();
 			void loadMap(std::string path);
 	};
 }
-
-#endif
-
-
-/*
-class Menu
-{
-    public:
-        Menu();
-        ~Menu();
-        void afficher(void);
-        void clic(void);
-        string afficheConsole(string nomFichier);
- 
-    private:
-        string fondMenu;
-};
- 
-#endif // MENU_H_INCLUDED
-*/
