@@ -11,4 +11,10 @@ struct ShapeVertex {
     glm::vec2 texCoords;
 };
 
+struct CubeAtom {
+	glm::vec3 position;
+	GLuint tex_id;
+	bool moveThrough;
+};
+
 }

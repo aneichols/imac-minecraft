@@ -1,5 +1,5 @@
 
-#include "Timer.hpp"
+#include "glimac/Timer.hpp"
 
 namespace Pokecraft {
 

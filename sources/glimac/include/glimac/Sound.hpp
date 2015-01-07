@@ -4,7 +4,7 @@
 
 namespace Pokecraft {
 
-	enum Sounds {JUMP, WALK, CRASH, BACKGROUND}; //  0 1 2
+	enum Sounds {JUMP, DESTROY, BUILD, BACKGROUND}; //  0 1 2 3
 	class Sound {
 
 		int build();
@@ -19,7 +19,10 @@ namespace Pokecraft {
 		                   "assets/sounds/jump.wav",
 		                   "assets/sounds/jump.wav",
 		                   "assets/sounds/jump.wav",
+		                   /*"assets/sounds/destroy_2.wav",
+		                   "assets/sounds/build.wav",*/
 		   };
+		   void clean();
 
 		public:
       Sound() {
@@ -27,8 +30,9 @@ namespace Pokecraft {
       }
 			void play(Sounds s);
 			int  loadSounds();
-			void clean();
+			
 			void setEnable(bool isEnabled);
 			bool getEnable() const;
+			~Sound();
 	};
 }

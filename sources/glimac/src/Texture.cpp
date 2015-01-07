@@ -8,7 +8,7 @@
 
 namespace glimac {
 	Texture Texture::load(std::string path) {
-		std::string complete_path = ("../assets/textures/" + path);
+		std::string complete_path = (path);
         
         SDL_Surface* pTexture = IMG_Load(complete_path.c_str());
         if (!pTexture) {

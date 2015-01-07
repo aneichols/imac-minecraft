@@ -19,7 +19,10 @@
 #include "glimac/Player.hpp"
 #include "glimac/Timer.hpp"
 #include "glimac/Interface.hpp"
+<<<<<<< HEAD
 #include "../src/Menu.cpp"
+=======
+>>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
 
 
 using namespace glimac;
@@ -329,6 +332,7 @@ int main(int argc, char** argv) {
          **************************************/
 
         if(isMenuEnabled){
+<<<<<<< HEAD
             Pokecraft::Sound s_menu;
             Pokecraft::Menu menu(s_menu);
 
@@ -340,6 +344,11 @@ int main(int argc, char** argv) {
         
             //player.getSoundPlayer().play(Pokecraft::BACKGROUND);
             //isMenuEnabled = false;
+=======
+            controlMenu(windowManager, mousePosition);
+            player.getSoundPlayer().play(Pokecraft::BACKGROUND);
+            isMenuEnabled = false;
+>>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
         }
         else{
         	controlGame(windowManager, player, mousePosition, map, textureManager , currentTexture, texturesPaths);
@@ -355,7 +364,7 @@ int main(int argc, char** argv) {
         projMatrix = glm::perspective(glm::radians(70.f), WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 100.f);
         MVMatrix = glm::mat4(1);
 
-        glBindVertexArray(vao);
+        //glBindVertexArray(vao);
         cubeProgramm.m_Program.use();
 
 
@@ -370,7 +379,10 @@ int main(int argc, char** argv) {
         glm::vec3 position_viewspace = glm::vec3(MVMatrix * glm::vec4(position_worldspace, 0));
         glUniform3fv(cubeProgramm.uLightDir_vs, 1, glm::value_ptr(position_viewspace));
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
         //map or some very beautiful landscape
         map.display(projMatrix, 
                     player, 
@@ -383,6 +395,7 @@ int main(int argc, char** argv) {
                     );
         //glBindVertexArray(0);
 
+<<<<<<< HEAD
     // /*********************************
     // * Tree
     // *********************************/
@@ -395,6 +408,20 @@ int main(int argc, char** argv) {
     //                 cubeProgramm.uMVPMatrix, 
     //                 cubeProgramm.uTextureCube,
     //                 textureManager);*/
+=======
+    /*********************************
+    * Tree
+    *********************************/
+
+    /*tree.display(projMatrix, 
+                    player, 
+                    MVMatrix, 
+                    cubeProgramm.uMVMatrix, 
+                    cubeProgramm.uNormalMatrix, 
+                    cubeProgramm.uMVPMatrix, 
+                    cubeProgramm.uTextureCube,
+                    textureManager);*/
+>>>>>>> 56ce1ee3133ed7be44468b868115b9e8c9bb2451
 
 
         

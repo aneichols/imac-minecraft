@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Physics.hpp"
+#include "glimac/Physics.hpp"
 
 namespace Pokecraft {
 
